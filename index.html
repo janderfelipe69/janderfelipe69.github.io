@@ -1171,27 +1171,22 @@ function renderOrderItems() {
 function renderCheckGroup(containerId, items, prefix, arr, max, warnId) {
   const container = document.getElementById(containerId);
   container.innerHTML = items.map((item, i) => `
-    <label class="item-check" id="${prefix}-item-${i}" onclick="toggleItem(event,'${prefix}',${i},'${item.replace(/'/g,"\\'")}',${max},'${warnId}')">
-      <input type="checkbox" id="${prefix}-cb-${i}" onclick="event.preventDefault()">
+    <label class="item-check" id="${prefix}-item-${i}">
+      <input type="checkbox" id="${prefix}-cb-${i}" onchange="toggleItem(this,'${prefix}',${i},'${item.replace(/'/g,"\\'")}','${warnId}')">
       <span>${item}</span>
     </label>
   `).join('');
 }
 
-function toggleItem(e, prefix, idx, value, max, warnId) {
-  e.preventDefault();
+function toggleItem(cb, prefix, idx, value, warnId) {
   const arr = prefix === 'prot' ? selectedProts : (prefix === 'acomp' ? selectedAcomp : selectedSalada);
+  const max = prefix === 'prot' ? selectedSize.maxProt : (prefix === 'acomp' ? selectedSize.maxAcomp : 99);
   const label = document.getElementById(`${prefix}-item-${idx}`);
-  const cb = document.getElementById(`${prefix}-cb-${idx}`);
   const warn = warnId ? document.getElementById(warnId) : null;
 
-  if (arr.includes(value)) {
-    arr.splice(arr.indexOf(value), 1);
-    label.classList.remove('checked');
-    cb.checked = false;
-    if (warn) warn.textContent = '';
-  } else {
+  if (cb.checked) {
     if (arr.length >= max) {
+      cb.checked = false;
       if (warn) {
         warn.textContent = `⚠ Máximo de ${max} ${prefix === 'prot' ? 'proteína(s)' : 'acompanhamento(s)'} para este tamanho.`;
         setTimeout(() => warn.textContent = '', 2500);
@@ -1200,7 +1195,10 @@ function toggleItem(e, prefix, idx, value, max, warnId) {
     }
     arr.push(value);
     label.classList.add('checked');
-    cb.checked = true;
+    if (warn) warn.textContent = '';
+  } else {
+    arr.splice(arr.indexOf(value), 1);
+    label.classList.remove('checked');
     if (warn) warn.textContent = '';
   }
   updateSummary();
