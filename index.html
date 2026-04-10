@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sextou na Faby 🍽️</title>
+<title id="page-title">Sextou na Faby 🍽️</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lato:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -873,8 +873,8 @@
 <!-- ===== HEADER ===== -->
 <header>
   <div class="header-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
-  <div class="logo-sextou">SEXTOU</div>
-  <span class="logo-nafaby">na Faby 🤌</span>
+  <div class="logo-sextou" id="logo-dia">SEXTOU</div>
+  <span class="logo-nafaby" id="logo-nafaby">na Faby 🤌</span>
   <p class="header-subtitle">Marmitex do dia &nbsp;•&nbsp; Peça pelo site</p>
 </header>
 
@@ -1413,6 +1413,19 @@ function saveAdmin() {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
+
+// ===== DIA DA SEMANA =====
+(function() {
+  const dias = ['Domingou', 'Segundou', 'Terçou', 'Quartou', 'Quintou', 'Sextou', 'Sabadou'];
+  const emojis = ['😇', '💪', '🔥', '⚡', '🎯', '🎉', '😎'];
+  const dia = new Date().getDay();
+  const nome = dias[dia];
+  const emoji = emojis[dia];
+
+  document.getElementById('logo-dia').textContent = nome.toUpperCase();
+  document.getElementById('logo-nafaby').textContent = `na Faby ${emoji}`;
+  document.getElementById('page-title').textContent = `${nome} na Faby 🍽️`;
+})();
 
 // Init
 renderMenuDisplay();
