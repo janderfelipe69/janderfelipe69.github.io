@@ -1303,21 +1303,27 @@ function sendOrder() {
 
   const total = selectedSize.price * qty;
 
-  let msg = `🍱 *PEDIDO - SEXTOU NA FABY* 🍱\n\n`;
-  msg += `👤 *Nome:* ${name}\n`;
-  msg += `📍 *Endereço:* ${address}\n`;
+  const diasNome = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  const diaHoje = diasNome[new Date().getDay()];
+  const horaAgora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+  let msg = `🍱 *NOVO PEDIDO — Sextou na Faby* 🍱\n`;
+  msg += `📅 ${diaHoje} às ${horaAgora}\n`;
+  msg += `━━━━━━━━━━━━━━━━━\n\n`;
+  msg += `👤 *Cliente:* ${name}\n`;
+  msg += `📍 *Entrega:* ${address}\n`;
   if (phone) msg += `📞 *Telefone:* ${phone}\n`;
   msg += `\n`;
-  msg += `🛒 *PEDIDO:*\n`;
+  msg += `🛒 *O QUE PEDIU:*\n`;
   msg += `━━━━━━━━━━━━━━━━━\n`;
-  msg += `📦 Marmitex R$${selectedSize.price} (${selectedSize.maxProt} prot. + ${selectedSize.maxAcomp} acomp.) × ${qty}\n`;
-  msg += `🍖 Proteínas: ${selectedProts.join(', ')}\n`;
-  msg += `🥘 Acompanhamentos: ${selectedAcomp.join(', ')}\n`;
-  if (selectedSalada.length > 0) msg += `🥗 Salada: ${selectedSalada.join(', ')}\n`;
+  msg += `📦 *Marmitex R$${selectedSize.price}* × ${qty} unid.\n`;
+  msg += `🍖 *Proteína(s):* ${selectedProts.join(', ')}\n`;
+  msg += `🥘 *Acompanhamento(s):* ${selectedAcomp.join(', ')}\n`;
+  if (selectedSalada.length > 0) msg += `🥗 *Salada:* ${selectedSalada.join(', ')}\n`;
+  if (obs) msg += `📝 *Observação:* ${obs}\n`;
   msg += `━━━━━━━━━━━━━━━━━\n`;
-  msg += `💰 *Total: R$${total},00*\n`;
-  if (obs) msg += `\n📝 *Obs:* ${obs}\n`;
-  msg += `\n✅ Aguardo confirmação!`;
+  msg += `💰 *Total: R$${total},00*\n\n`;
+  msg += `✅ _Pedido enviado pelo site janderfelipe69.github.io_`;
 
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
