@@ -1419,6 +1419,8 @@ function changeBebidaQty(idx, delta) {
   renderBebidas();
   updateSummary();
 }
+
+function toggleItem(cb, prefix, idx, value, warnId) {
   const arr = prefix === 'prot' ? selectedProts : prefix === 'acomp' ? selectedAcomp : prefix === 'bebida' ? selectedBebidas : selectedSalada;
   const max = prefix === 'prot' ? selectedSize.maxProt : prefix === 'acomp' ? selectedSize.maxAcomp : 99;
   const label = document.getElementById(`${prefix}-item-${idx}`);
