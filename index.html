@@ -880,20 +880,7 @@
 
 <!-- ===== PRICES ===== -->
 <div class="prices-banner">
-  <div class="prices-card">
-    <div class="price-row">
-      <span class="price-tag">R$20</span>
-      <span class="price-desc">Marmitex com <strong>1 proteína</strong> e <strong>2 acompanhamentos</strong></span>
-    </div>
-    <div class="price-row">
-      <span class="price-tag">R$25</span>
-      <span class="price-desc">Marmitex com <strong>2 proteínas</strong> e <strong>3 acompanhamentos</strong></span>
-    </div>
-    <div class="price-row">
-      <span class="price-tag">R$30</span>
-      <span class="price-desc">Marmitex com <strong>2 proteínas</strong> e <strong>4 acompanhamentos</strong></span>
-    </div>
-  </div>
+  <div class="prices-card" id="prices-card"></div>
 </div>
 
 <!-- ===== MENU CARD ===== -->
@@ -947,14 +934,14 @@
       <!-- Sobremesa -->
       <div class="menu-section full-width">
         <h3>🍉 Sobremesa</h3>
-        <ul id="menu-sobremesa">
-          <li>Abacaxi ou melancia ou mamão ou laranja</li>
-        </ul>
+        <ul id="menu-sobremesa"></ul>
+      </div>
+      <!-- Bebidas -->
+      <div class="menu-section full-width">
+        <h3>🥤 Bebidas</h3>
+        <ul id="menu-bebidas"></ul>
       </div>
     </div>
-    <p style="text-align:center;margin-top:14px;font-size:0.85rem;color:#777;font-style:italic;">
-      🥤 Temos suco da fruta e refrigerantes
-    </p>
   </div>
 </div>
 
@@ -988,20 +975,7 @@
       <!-- Size -->
       <div class="item-group">
         <div class="item-group-title">Escolha o tamanho</div>
-        <div class="size-selector">
-          <div class="size-option selected" id="size-20" onclick="selectSize(20,1,2)">
-            <div class="size-price">R$20</div>
-            <div class="size-label">1 proteína + 2 acomp.</div>
-          </div>
-          <div class="size-option" id="size-25" onclick="selectSize(25,2,3)">
-            <div class="size-price">R$25</div>
-            <div class="size-label">2 proteínas + 3 acomp.</div>
-          </div>
-          <div class="size-option" id="size-30" onclick="selectSize(30,2,4)">
-            <div class="size-price">R$30</div>
-            <div class="size-label">2 proteínas + 4 acomp.</div>
-          </div>
-        </div>
+        <div class="size-selector" id="size-selector"></div>
       </div>
 
       <!-- Proteins -->
@@ -1124,6 +1098,20 @@
       <button class="btn-add-item" onclick="addAdminItem('sobremesa')">+ Adicionar sobremesa</button>
     </div>
 
+    <!-- Bebidas -->
+    <div class="admin-section">
+      <h3>🥤 Bebidas</h3>
+      <div id="admin-bebidas-list"></div>
+      <button class="btn-add-item" onclick="addAdminItem('bebidas')">+ Adicionar bebida</button>
+    </div>
+
+    <!-- Preços -->
+    <div class="admin-section">
+      <h3>💰 Preços das Marmitex</h3>
+      <div id="admin-precos-list"></div>
+      <button class="btn-add-item" onclick="addPreco()">+ Adicionar tamanho</button>
+    </div>
+
     <button class="btn-save-all" onclick="saveAdmin()">💾 Salvar Cardápio</button>
     <div class="save-toast" id="save-toast">✅ Cardápio salvo com sucesso!</div>
   </div>
@@ -1140,11 +1128,17 @@ const DEFAULT_DATA = {
   proteinas: ['Feijoada','Filé de frango empanado','Costela','Bisteca suína','Linguiça'],
   acompanhamentos: ['Macarrão ao molho vermelho','Repolho refogado','Vagem com cenoura refogada','Couve temperada','Mandioca cozida','Polenta frita','Banana frita','Batata chips'],
   salada: ['Alface','Pepino','Tomate','Beterraba','Cenoura','Vinagrete','Rabanete'],
-  sobremesa: ['Abacaxi','Melancia','Mamão','Laranja']
+  sobremesa: ['Abacaxi','Melancia','Mamão','Laranja'],
+  bebidas: ['Suco da fruta','Refrigerante lata','Água'],
+  precos: [
+    { preco: 20, maxProt: 1, maxAcomp: 2 },
+    { preco: 25, maxProt: 2, maxAcomp: 3 },
+    { preco: 30, maxProt: 2, maxAcomp: 4 }
+  ]
 };
 
 let menuData = loadMenu();
-let selectedSize = { price: 20, maxProt: 1, maxAcomp: 2 };
+let selectedSize = { price: menuData.precos[0].preco, maxProt: menuData.precos[0].maxProt, maxAcomp: menuData.precos[0].maxAcomp };
 let selectedProts = [];
 let selectedAcomp = [];
 let selectedSalada = [];
@@ -1163,20 +1157,31 @@ function saveMenu() {
 
 // ===== RENDER MENU DISPLAY =====
 function renderMenuDisplay() {
-  // Proteinas
-  const protEl = document.getElementById('menu-prot');
-  protEl.innerHTML = menuData.proteinas.map(p=>`<li>${p}</li>`).join('');
-  // Acomp
-  const acompEl = document.getElementById('menu-acomp');
-  acompEl.innerHTML = menuData.acompanhamentos.map(a=>`<li>${a}</li>`).join('');
-  // Salada
-  const saladaEl = document.getElementById('menu-salada');
-  saladaEl.innerHTML = menuData.salada.map(s=>`<li>${s}</li>`).join('');
-  // Sobremesa
+  document.getElementById('menu-prot').innerHTML = menuData.proteinas.map(p=>`<li>${p}</li>`).join('');
+  document.getElementById('menu-acomp').innerHTML = menuData.acompanhamentos.map(a=>`<li>${a}</li>`).join('');
+  document.getElementById('menu-salada').innerHTML = menuData.salada.map(s=>`<li>${s}</li>`).join('');
+
   const sobEl = document.getElementById('menu-sobremesa');
-  if(menuData.sobremesa.length > 0) {
-    sobEl.innerHTML = `<li>${menuData.sobremesa.join(' ou ')}</li>`;
-  }
+  sobEl.innerHTML = menuData.sobremesa.length > 0 ? `<li>${menuData.sobremesa.join(', ')}</li>` : '';
+
+  const bebEl = document.getElementById('menu-bebidas');
+  bebEl.innerHTML = menuData.bebidas.length > 0 ? `<li>${menuData.bebidas.join(', ')}</li>` : '';
+
+  // Banner de preços
+  document.getElementById('prices-card').innerHTML = menuData.precos.map(p => `
+    <div class="price-row">
+      <span class="price-tag">R$${p.preco}</span>
+      <span class="price-desc">Marmitex com <strong>${p.maxProt} proteína${p.maxProt > 1 ? 's' : ''}</strong> e <strong>${p.maxAcomp} acompanhamentos</strong></span>
+    </div>
+  `).join('');
+
+  // Botões de tamanho
+  document.getElementById('size-selector').innerHTML = menuData.precos.map((p, i) => `
+    <div class="size-option ${i === 0 ? 'selected' : ''}" id="size-${p.preco}" onclick="selectSize(${p.preco},${p.maxProt},${p.maxAcomp})">
+      <div class="size-price">R$${p.preco}</div>
+      <div class="size-label">${p.maxProt} proteína${p.maxProt > 1 ? 's' : ''} + ${p.maxAcomp} acomp.</div>
+    </div>
+  `).join('');
 }
 
 // ===== RENDER ORDER ITEMS =====
@@ -1372,44 +1377,82 @@ function renderAdminList(category, containerId) {
   `).join('');
 }
 
+function renderAdminPrecos() {
+  const container = document.getElementById('admin-precos-list');
+  container.innerHTML = menuData.precos.map((p, i) => `
+    <div class="admin-item-row" id="admin-row-precos-${i}">
+      <span style="font-size:0.8rem;color:#888;min-width:50px">R$</span>
+      <input type="number" value="${p.preco}" id="admin-preco-val-${i}" placeholder="Preço" style="width:80px">
+      <input type="number" value="${p.maxProt}" id="admin-preco-prot-${i}" placeholder="Prot" style="width:60px" title="Máx proteínas">
+      <input type="number" value="${p.maxAcomp}" id="admin-preco-acomp-${i}" placeholder="Acomp" style="width:60px" title="Máx acompanhamentos">
+      <span style="font-size:0.75rem;color:#888">prot / acomp</span>
+      <button class="btn-remove" onclick="removePreco(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
 function renderAdminLists() {
   renderAdminList('proteinas', 'admin-prot-list');
   renderAdminList('acompanhamentos', 'admin-acomp-list');
   renderAdminList('salada', 'admin-salada-list');
   renderAdminList('sobremesa', 'admin-sobremesa-list');
+  renderAdminList('bebidas', 'admin-bebidas-list');
+  renderAdminPrecos();
 }
 
 function addAdminItem(type) {
-  const map = { prot:'proteinas', acomp:'acompanhamentos', salada:'salada', sobremesa:'sobremesa' };
+  const map = { prot:'proteinas', acomp:'acompanhamentos', salada:'salada', sobremesa:'sobremesa', bebidas:'bebidas' };
   const cat = map[type];
   menuData[cat].push('Novo item');
-  const listMap = { prot:'admin-prot-list', acomp:'admin-acomp-list', salada:'admin-salada-list', sobremesa:'admin-sobremesa-list' };
+  const listMap = { prot:'admin-prot-list', acomp:'admin-acomp-list', salada:'admin-salada-list', sobremesa:'admin-sobremesa-list', bebidas:'admin-bebidas-list' };
   renderAdminList(cat, listMap[type]);
   const newIdx = menuData[cat].length - 1;
   const input = document.getElementById(`admin-input-${cat}-${newIdx}`);
   if(input) { input.focus(); input.select(); }
 }
 
+function addPreco() {
+  menuData.precos.push({ preco: 0, maxProt: 1, maxAcomp: 2 });
+  renderAdminPrecos();
+}
+
 function removeAdminItem(category, idx) {
   if(!confirm('Remover este item?')) return;
   menuData[category].splice(idx, 1);
-  const listMap = { proteinas:'admin-prot-list', acompanhamentos:'admin-acomp-list', salada:'admin-salada-list', sobremesa:'admin-sobremesa-list' };
+  const listMap = { proteinas:'admin-prot-list', acompanhamentos:'admin-acomp-list', salada:'admin-salada-list', sobremesa:'admin-sobremesa-list', bebidas:'admin-bebidas-list' };
   renderAdminList(category, listMap[category]);
 }
 
+function removePreco(idx) {
+  if(menuData.precos.length <= 1) { alert('Precisa ter pelo menos 1 tamanho!'); return; }
+  if(!confirm('Remover este tamanho?')) return;
+  menuData.precos.splice(idx, 1);
+  renderAdminPrecos();
+}
+
 function saveAdmin() {
-  // Read current values from inputs
   const cats = {
     proteinas: 'admin-prot-list',
     acompanhamentos: 'admin-acomp-list',
     salada: 'admin-salada-list',
-    sobremesa: 'admin-sobremesa-list'
+    sobremesa: 'admin-sobremesa-list',
+    bebidas: 'admin-bebidas-list'
   };
 
   for (const [cat, listId] of Object.entries(cats)) {
     const inputs = document.querySelectorAll(`#${listId} input[type=text]`);
     menuData[cat] = Array.from(inputs).map(inp => inp.value.trim()).filter(v => v.length > 0);
   }
+
+  // Salvar preços
+  menuData.precos = menuData.precos.map((_, i) => ({
+    preco: parseInt(document.getElementById(`admin-preco-val-${i}`)?.value) || 0,
+    maxProt: parseInt(document.getElementById(`admin-preco-prot-${i}`)?.value) || 1,
+    maxAcomp: parseInt(document.getElementById(`admin-preco-acomp-${i}`)?.value) || 2
+  })).filter(p => p.preco > 0);
+
+  // Resetar tamanho selecionado para o primeiro
+  selectedSize = { price: menuData.precos[0].preco, maxProt: menuData.precos[0].maxProt, maxAcomp: menuData.precos[0].maxAcomp };
 
   saveMenu();
   renderMenuDisplay();
