@@ -1780,24 +1780,21 @@ function copyPix() {
   document.getElementById('page-title').textContent = `${nome} na Faby 🍽️`;
 })();
 
-// Init — limpa cache antigo se não tiver precos ou pix
+// Init — controle de versão do cache
 (function() {
+  const CACHE_VERSION = '3';
   try {
-    const saved = localStorage.getItem('faby_menu');
-    if (saved) {
-      const d = JSON.parse(saved);
-      if (!d.precos || !d.pix) {
-        localStorage.removeItem('faby_menu');
-        menuData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-      }
+    if (localStorage.getItem('faby_cache_ver') !== CACHE_VERSION) {
+      localStorage.removeItem('faby_menu');
+      localStorage.setItem('faby_cache_ver', CACHE_VERSION);
+      menuData = JSON.parse(JSON.stringify(DEFAULT_DATA));
     }
   } catch(e) {}
 })();
 
 renderMenuDisplay();
 renderOrderItems();
-setTimeout(renderPix, 100);
-renderPix();
+setTimeout(renderPix, 300);
 document.getElementById('obs').addEventListener('input', updateSummary);
 </script>
 </body>
