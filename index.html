@@ -1147,7 +1147,11 @@ let qty = 1;
 function loadMenu() {
   try {
     const saved = localStorage.getItem('faby_menu');
-    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+    const data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+    // Garantir que campos novos existam mesmo em dados antigos salvos
+    if (!data.bebidas) data.bebidas = JSON.parse(JSON.stringify(DEFAULT_DATA.bebidas));
+    if (!data.precos) data.precos = JSON.parse(JSON.stringify(DEFAULT_DATA.precos));
+    return data;
   } catch(e) { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
 }
 
@@ -1274,23 +1278,17 @@ function changeQty(delta) {
 // ===== SUMMARY =====
 function updateSummary() {
   const el = document.getElementById('order-summary');
+  if (!selectedSize.price) {
+    el.innerHTML = `<span style="color:#999">Selecione o tamanho e os itens para ver o resumo do pedido.</span>`;
+    return;
+  }
   const total = selectedSize.price * qty;
-
   let html = `<strong>🍱 Marmitex R$${selectedSize.price}</strong> × ${qty} = <strong style="color:var(--red-bright)">R$${total},00</strong><br>`;
-
-  if (selectedProts.length > 0)
-    html += `🍖 <strong>Proteínas:</strong> ${selectedProts.join(', ')}<br>`;
-
-  if (selectedAcomp.length > 0)
-    html += `🥘 <strong>Acompanhamentos:</strong> ${selectedAcomp.join(', ')}<br>`;
-
-  if (selectedSalada.length > 0)
-    html += `🥗 <strong>Salada:</strong> ${selectedSalada.join(', ')}<br>`;
-
+  if (selectedProts.length > 0) html += `🍖 <strong>Proteínas:</strong> ${selectedProts.join(', ')}<br>`;
+  if (selectedAcomp.length > 0) html += `🥘 <strong>Acompanhamentos:</strong> ${selectedAcomp.join(', ')}<br>`;
+  if (selectedSalada.length > 0) html += `🥗 <strong>Salada:</strong> ${selectedSalada.join(', ')}<br>`;
   const obs = document.getElementById('obs')?.value;
-  if (obs && obs.trim())
-    html += `📝 <strong>Obs:</strong> ${obs.trim()}`;
-
+  if (obs && obs.trim()) html += `📝 <strong>Obs:</strong> ${obs.trim()}`;
   el.innerHTML = html;
 }
 
