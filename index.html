@@ -1004,6 +1004,12 @@
         <div class="items-grid" id="salada-items"></div>
       </div>
 
+      <!-- Bebidas opcional -->
+      <div class="item-group">
+        <div class="item-group-title">🥤 Bebidas (opcional)</div>
+        <div class="items-grid" id="bebidas-items"></div>
+      </div>
+
       <!-- Qty -->
       <div class="qty-row">
         <label>Quantidade</label>
@@ -1129,7 +1135,11 @@ const DEFAULT_DATA = {
   acompanhamentos: ['Macarrão ao molho vermelho','Repolho refogado','Vagem com cenoura refogada','Couve temperada','Mandioca cozida','Polenta frita','Banana frita','Batata chips'],
   salada: ['Alface','Pepino','Tomate','Beterraba','Cenoura','Vinagrete','Rabanete'],
   sobremesa: ['Abacaxi','Melancia','Mamão','Laranja'],
-  bebidas: ['Suco da fruta','Refrigerante lata','Água'],
+  bebidas: [
+    { nome: 'Suco da fruta', valor: 5.00 },
+    { nome: 'Refrigerante lata', valor: 4.00 },
+    { nome: 'Água', valor: 2.00 }
+  ],
   precos: [
     { preco: 20, maxProt: 1, maxAcomp: 2 },
     { preco: 25, maxProt: 2, maxAcomp: 3 },
@@ -1142,6 +1152,7 @@ let selectedSize = { price: menuData.precos[0].preco, maxProt: menuData.precos[0
 let selectedProts = [];
 let selectedAcomp = [];
 let selectedSalada = [];
+let selectedBebidas = [];
 let qty = 1;
 
 function loadMenu() {
@@ -1150,6 +1161,10 @@ function loadMenu() {
     const data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
     // Garantir que campos novos existam mesmo em dados antigos salvos
     if (!data.bebidas) data.bebidas = JSON.parse(JSON.stringify(DEFAULT_DATA.bebidas));
+    // Migrar bebidas antigas (array de strings) para novo formato {nome, valor}
+    if (data.bebidas.length > 0 && typeof data.bebidas[0] === 'string') {
+      data.bebidas = data.bebidas.map(b => ({ nome: b, valor: 0 }));
+    }
     if (!data.precos) data.precos = JSON.parse(JSON.stringify(DEFAULT_DATA.precos));
     return data;
   } catch(e) { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
@@ -1169,7 +1184,9 @@ function renderMenuDisplay() {
   sobEl.innerHTML = menuData.sobremesa.length > 0 ? `<li>${menuData.sobremesa.join(', ')}</li>` : '';
 
   const bebEl = document.getElementById('menu-bebidas');
-  bebEl.innerHTML = menuData.bebidas.length > 0 ? `<li>${menuData.bebidas.join(', ')}</li>` : '';
+  bebEl.innerHTML = menuData.bebidas.length > 0
+    ? menuData.bebidas.map(b => `<li>${b.nome}${b.valor > 0 ? ` — R$${parseFloat(b.valor).toFixed(2).replace('.',',')}` : ''}</li>`).join('')
+    : '';
 
   // Banner de preços
   document.getElementById('prices-card').innerHTML = menuData.precos.map(p => `
@@ -1194,10 +1211,15 @@ function renderOrderItems() {
   selectedProts = [];
   selectedAcomp = [];
   selectedSalada = [];
+  selectedBebidas = [];
 
   renderCheckGroup('prot-items', menuData.proteinas, 'prot', selectedProts, selectedSize.maxProt, 'prot-warn');
   renderCheckGroup('acomp-items', menuData.acompanhamentos, 'acomp', selectedAcomp, selectedSize.maxAcomp, 'acomp-warn');
   renderCheckGroup('salada-items', menuData.salada, 'salada', selectedSalada, 99, '');
+
+  // Bebidas com nome e valor
+  const bebNomes = menuData.bebidas.map(b => b.valor > 0 ? `${b.nome} (R$${parseFloat(b.valor).toFixed(2).replace('.',',')})` : b.nome);
+  renderCheckGroup('bebidas-items', bebNomes, 'bebida', selectedBebidas, 99, '');
 
   updateSummary();
 }
@@ -1213,8 +1235,8 @@ function renderCheckGroup(containerId, items, prefix, arr, max, warnId) {
 }
 
 function toggleItem(cb, prefix, idx, value, warnId) {
-  const arr = prefix === 'prot' ? selectedProts : (prefix === 'acomp' ? selectedAcomp : selectedSalada);
-  const max = prefix === 'prot' ? selectedSize.maxProt : (prefix === 'acomp' ? selectedSize.maxAcomp : 99);
+  const arr = prefix === 'prot' ? selectedProts : prefix === 'acomp' ? selectedAcomp : prefix === 'bebida' ? selectedBebidas : selectedSalada;
+  const max = prefix === 'prot' ? selectedSize.maxProt : prefix === 'acomp' ? selectedSize.maxAcomp : 99;
   const label = document.getElementById(`${prefix}-item-${idx}`);
   const warn = warnId ? document.getElementById(warnId) : null;
 
@@ -1287,6 +1309,7 @@ function updateSummary() {
   if (selectedProts.length > 0) html += `🍖 <strong>Proteínas:</strong> ${selectedProts.join(', ')}<br>`;
   if (selectedAcomp.length > 0) html += `🥘 <strong>Acompanhamentos:</strong> ${selectedAcomp.join(', ')}<br>`;
   if (selectedSalada.length > 0) html += `🥗 <strong>Salada:</strong> ${selectedSalada.join(', ')}<br>`;
+  if (selectedBebidas.length > 0) html += `🥤 <strong>Bebidas:</strong> ${selectedBebidas.join(', ')}<br>`;
   const obs = document.getElementById('obs')?.value;
   if (obs && obs.trim()) html += `📝 <strong>Obs:</strong> ${obs.trim()}`;
   el.innerHTML = html;
@@ -1323,6 +1346,7 @@ function sendOrder() {
   msg += `🍖 *Proteína(s):* ${selectedProts.join(', ')}\n`;
   msg += `🥘 *Acompanhamento(s):* ${selectedAcomp.join(', ')}\n`;
   if (selectedSalada.length > 0) msg += `🥗 *Salada:* ${selectedSalada.join(', ')}\n`;
+  if (selectedBebidas.length > 0) msg += `🥤 *Bebidas:* ${selectedBebidas.join(', ')}\n`;
   if (obs) msg += `📝 *Observação:* ${obs}\n`;
   msg += `━━━━━━━━━━━━━━━━━\n`;
   msg += `💰 *Total: R$${total},00*\n\n`;
@@ -1367,6 +1391,22 @@ function closeAdmin() {
 
 function renderAdminList(category, containerId) {
   const container = document.getElementById(containerId);
+  if (category === 'bebidas') {
+    container.innerHTML = (menuData.bebidas.length > 0 ? `
+      <div style="display:grid;grid-template-columns:1fr 100px 90px;gap:6px;margin-bottom:4px;padding:0 4px">
+        <span style="font-size:0.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px">Nome da bebida</span>
+        <span style="font-size:0.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px">Valor (R$)</span>
+        <span></span>
+      </div>` : '') +
+      menuData.bebidas.map((b, i) => `
+        <div class="admin-item-row" id="admin-row-bebidas-${i}" style="display:grid;grid-template-columns:1fr 100px 90px;gap:6px;align-items:center">
+          <input type="text" value="${b.nome.replace(/"/g,'&quot;')}" id="admin-input-bebidas-nome-${i}" placeholder="Nome da bebida">
+          <input type="number" value="${b.valor}" id="admin-input-bebidas-val-${i}" placeholder="0.00" step="0.50" min="0" style="text-align:center">
+          <button class="btn-remove" onclick="removeAdminItem('bebidas',${i})">✕ Remover</button>
+        </div>
+      `).join('');
+    return;
+  }
   container.innerHTML = menuData[category].map((item, i) => `
     <div class="admin-item-row" id="admin-row-${category}-${i}">
       <input type="text" value="${item.replace(/"/g,'&quot;')}" id="admin-input-${category}-${i}">
@@ -1377,16 +1417,22 @@ function renderAdminList(category, containerId) {
 
 function renderAdminPrecos() {
   const container = document.getElementById('admin-precos-list');
-  container.innerHTML = menuData.precos.map((p, i) => `
-    <div class="admin-item-row" id="admin-row-precos-${i}">
-      <span style="font-size:0.8rem;color:#888;min-width:50px">R$</span>
-      <input type="number" value="${p.preco}" id="admin-preco-val-${i}" placeholder="Preço" style="width:80px">
-      <input type="number" value="${p.maxProt}" id="admin-preco-prot-${i}" placeholder="Prot" style="width:60px" title="Máx proteínas">
-      <input type="number" value="${p.maxAcomp}" id="admin-preco-acomp-${i}" placeholder="Acomp" style="width:60px" title="Máx acompanhamentos">
-      <span style="font-size:0.75rem;color:#888">prot / acomp</span>
-      <button class="btn-remove" onclick="removePreco(${i})">✕</button>
-    </div>
-  `).join('');
+  container.innerHTML = (menuData.precos.length > 0 ? `
+    <div style="display:grid;grid-template-columns:90px 90px 120px 90px auto;gap:6px;margin-bottom:4px;padding:0 4px;align-items:center">
+      <span style="font-size:0.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px">Preço (R$)</span>
+      <span style="font-size:0.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px">Proteínas</span>
+      <span style="font-size:0.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px">Acompanhamentos</span>
+      <span></span><span></span>
+    </div>` : '') +
+    menuData.precos.map((p, i) => `
+      <div class="admin-item-row" id="admin-row-precos-${i}" style="display:grid;grid-template-columns:90px 90px 120px 90px auto;gap:6px;align-items:center">
+        <input type="number" value="${p.preco}" id="admin-preco-val-${i}" placeholder="Ex: 20" min="1">
+        <input type="number" value="${p.maxProt}" id="admin-preco-prot-${i}" placeholder="Ex: 1" min="1">
+        <input type="number" value="${p.maxAcomp}" id="admin-preco-acomp-${i}" placeholder="Ex: 2" min="1">
+        <span style="font-size:0.72rem;color:#aaa">máx cada</span>
+        <button class="btn-remove" onclick="removePreco(${i})">✕</button>
+      </div>
+    `).join('');
 }
 
 function renderAdminLists() {
@@ -1401,6 +1447,14 @@ function renderAdminLists() {
 function addAdminItem(type) {
   const map = { prot:'proteinas', acomp:'acompanhamentos', salada:'salada', sobremesa:'sobremesa', bebidas:'bebidas' };
   const cat = map[type];
+  if (cat === 'bebidas') {
+    menuData.bebidas.push({ nome: 'Nova bebida', valor: 0 });
+    renderAdminList('bebidas', 'admin-bebidas-list');
+    const newIdx = menuData.bebidas.length - 1;
+    const input = document.getElementById(`admin-input-bebidas-nome-${newIdx}`);
+    if(input) { input.focus(); input.select(); }
+    return;
+  }
   menuData[cat].push('Novo item');
   const listMap = { prot:'admin-prot-list', acomp:'admin-acomp-list', salada:'admin-salada-list', sobremesa:'admin-sobremesa-list', bebidas:'admin-bebidas-list' };
   renderAdminList(cat, listMap[type]);
@@ -1433,14 +1487,19 @@ function saveAdmin() {
     proteinas: 'admin-prot-list',
     acompanhamentos: 'admin-acomp-list',
     salada: 'admin-salada-list',
-    sobremesa: 'admin-sobremesa-list',
-    bebidas: 'admin-bebidas-list'
+    sobremesa: 'admin-sobremesa-list'
   };
 
   for (const [cat, listId] of Object.entries(cats)) {
     const inputs = document.querySelectorAll(`#${listId} input[type=text]`);
     menuData[cat] = Array.from(inputs).map(inp => inp.value.trim()).filter(v => v.length > 0);
   }
+
+  // Salvar bebidas com nome e valor
+  menuData.bebidas = menuData.bebidas.map((_, i) => ({
+    nome: document.getElementById(`admin-input-bebidas-nome-${i}`)?.value.trim() || '',
+    valor: parseFloat(document.getElementById(`admin-input-bebidas-val-${i}`)?.value) || 0
+  })).filter(b => b.nome.length > 0);
 
   // Salvar preços
   menuData.precos = menuData.precos.map((_, i) => ({
