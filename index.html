@@ -1728,8 +1728,16 @@ function renderPix() {
   document.getElementById('pix-key-display').textContent = formatarChavePix(chave);
   const container = document.getElementById('pix-qrcode');
   container.innerHTML = '';
-  if (chave) {
-    qrInstance = new QRCode(container, {
+  if (!chave) return;
+
+  // Aguarda a lib QRCode estar disponível
+  if (typeof QRCode === 'undefined') {
+    setTimeout(renderPix, 300);
+    return;
+  }
+
+  try {
+    new QRCode(container, {
       text: chave,
       width: 180,
       height: 180,
@@ -1737,6 +1745,8 @@ function renderPix() {
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
+  } catch(e) {
+    container.innerHTML = `<p style="font-size:0.8rem;color:#999">Não foi possível gerar o QR code.<br>Use a chave abaixo para pagar.</p>`;
   }
 }
 
@@ -1770,9 +1780,23 @@ function copyPix() {
   document.getElementById('page-title').textContent = `${nome} na Faby 🍽️`;
 })();
 
-// Init
+// Init — limpa cache antigo se não tiver precos ou pix
+(function() {
+  try {
+    const saved = localStorage.getItem('faby_menu');
+    if (saved) {
+      const d = JSON.parse(saved);
+      if (!d.precos || !d.pix) {
+        localStorage.removeItem('faby_menu');
+        menuData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      }
+    }
+  } catch(e) {}
+})();
+
 renderMenuDisplay();
 renderOrderItems();
+setTimeout(renderPix, 100);
 renderPix();
 document.getElementById('obs').addEventListener('input', updateSummary);
 </script>
