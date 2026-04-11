@@ -492,7 +492,85 @@
     line-height: 1.2;
   }
 
-  /* Order summary */
+  .bebida-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--white);
+    transition: all 0.15s;
+  }
+  .bebida-item.checked {
+    border-color: var(--red-bright);
+    background: #fff0f0;
+  }
+  .bebida-check-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    user-select: none;
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+  }
+  .bebida-check-label input[type=checkbox] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border: 2px solid var(--cream-dark);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .bebida-check-label input[type=checkbox]:checked {
+    background: var(--red-bright);
+    border-color: var(--red-bright);
+  }
+  .bebida-check-label input[type=checkbox]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 6px; height: 10px;
+    border: 2px solid white;
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .bebida-qty {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .bebida-qty button {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--red-mid);
+    background: var(--white);
+    color: var(--red-bright);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .bebida-qty button:hover { background: var(--red-bright); color: white; }
+  .bebida-qty span {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--red-deep);
+    min-width: 20px;
+    text-align: center;
+  }
   .order-summary {
     margin-top: 20px;
     background: #fff8f0;
@@ -1152,7 +1230,7 @@ let selectedSize = { price: menuData.precos[0].preco, maxProt: menuData.precos[0
 let selectedProts = [];
 let selectedAcomp = [];
 let selectedSalada = [];
-let selectedBebidas = [];
+let selectedBebidas = {}; // { idx: qtd }
 let qty = 1;
 
 function loadMenu() {
@@ -1211,15 +1289,12 @@ function renderOrderItems() {
   selectedProts = [];
   selectedAcomp = [];
   selectedSalada = [];
-  selectedBebidas = [];
+  selectedBebidas = {};
 
   renderCheckGroup('prot-items', menuData.proteinas, 'prot', selectedProts, selectedSize.maxProt, 'prot-warn');
   renderCheckGroup('acomp-items', menuData.acompanhamentos, 'acomp', selectedAcomp, selectedSize.maxAcomp, 'acomp-warn');
   renderCheckGroup('salada-items', menuData.salada, 'salada', selectedSalada, 99, '');
-
-  // Bebidas com nome e valor
-  const bebNomes = menuData.bebidas.map(b => b.valor > 0 ? `${b.nome} (R$${parseFloat(b.valor).toFixed(2).replace('.',',')})` : b.nome);
-  renderCheckGroup('bebidas-items', bebNomes, 'bebida', selectedBebidas, 99, '');
+  renderBebidas();
 
   updateSummary();
 }
@@ -1234,7 +1309,48 @@ function renderCheckGroup(containerId, items, prefix, arr, max, warnId) {
   `).join('');
 }
 
-function toggleItem(cb, prefix, idx, value, warnId) {
+function renderBebidas() {
+  const container = document.getElementById('bebidas-items');
+  if (!menuData.bebidas.length) { container.innerHTML = ''; return; }
+  container.innerHTML = menuData.bebidas.map((b, i) => {
+    const label = b.valor > 0 ? `${b.nome} — R$${parseFloat(b.valor).toFixed(2).replace('.',',')}` : b.nome;
+    const checked = !!selectedBebidas[i];
+    return `
+      <div class="bebida-item ${checked ? 'checked' : ''}" id="bebida-item-${i}">
+        <label class="bebida-check-label" onclick="toggleBebida(${i})">
+          <input type="checkbox" id="bebida-cb-${i}" ${checked ? 'checked' : ''} onclick="event.stopPropagation();toggleBebida(${i})">
+          <span>${label}</span>
+        </label>
+        ${checked ? `
+        <div class="bebida-qty">
+          <button onclick="changeBebidaQty(${i},-1)">−</button>
+          <span id="bebida-qty-${i}">${selectedBebidas[i]}</span>
+          <button onclick="changeBebidaQty(${i},1)">+</button>
+        </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function toggleBebida(idx) {
+  if (selectedBebidas[idx]) {
+    delete selectedBebidas[idx];
+  } else {
+    selectedBebidas[idx] = 1;
+  }
+  renderBebidas();
+  updateSummary();
+}
+
+function changeBebidaQty(idx, delta) {
+  const nova = (selectedBebidas[idx] || 1) + delta;
+  if (nova <= 0) {
+    delete selectedBebidas[idx];
+  } else {
+    selectedBebidas[idx] = nova;
+  }
+  renderBebidas();
+  updateSummary();
+}
   const arr = prefix === 'prot' ? selectedProts : prefix === 'acomp' ? selectedAcomp : prefix === 'bebida' ? selectedBebidas : selectedSalada;
   const max = prefix === 'prot' ? selectedSize.maxProt : prefix === 'acomp' ? selectedSize.maxAcomp : 99;
   const label = document.getElementById(`${prefix}-item-${idx}`);
@@ -1309,7 +1425,11 @@ function updateSummary() {
   if (selectedProts.length > 0) html += `🍖 <strong>Proteínas:</strong> ${selectedProts.join(', ')}<br>`;
   if (selectedAcomp.length > 0) html += `🥘 <strong>Acompanhamentos:</strong> ${selectedAcomp.join(', ')}<br>`;
   if (selectedSalada.length > 0) html += `🥗 <strong>Salada:</strong> ${selectedSalada.join(', ')}<br>`;
-  if (selectedBebidas.length > 0) html += `🥤 <strong>Bebidas:</strong> ${selectedBebidas.join(', ')}<br>`;
+  const bebList = Object.entries(selectedBebidas).map(([i, q]) => {
+    const b = menuData.bebidas[i];
+    return b ? `${b.nome}${q > 1 ? ` ×${q}` : ''}` : '';
+  }).filter(Boolean);
+  if (bebList.length > 0) html += `🥤 <strong>Bebidas:</strong> ${bebList.join(', ')}<br>`;
   const obs = document.getElementById('obs')?.value;
   if (obs && obs.trim()) html += `📝 <strong>Obs:</strong> ${obs.trim()}`;
   el.innerHTML = html;
@@ -1333,24 +1453,29 @@ function sendOrder() {
   const diaHoje = diasNome[new Date().getDay()];
   const horaAgora = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
 
-  let msg = `🍱 *NOVO PEDIDO — Sextou na Faby* 🍱\n`;
-  msg += `📅 ${diaHoje} às ${horaAgora}\n`;
-  msg += `━━━━━━━━━━━━━━━━━\n\n`;
-  msg += `👤 *Cliente:* ${name}\n`;
-  msg += `📍 *Entrega:* ${address}\n`;
-  if (phone) msg += `📞 *Telefone:* ${phone}\n`;
+  let msg = `*NOVO PEDIDO - Sextou na Faby*\n`;
+  msg += `${diaHoje}, ${horaAgora}\n`;
+  msg += `-----------------------------\n\n`;
+  msg += `*CLIENTE*\n`;
+  msg += `Nome: ${name}\n`;
+  msg += `Entrega: ${address}\n`;
+  if (phone) msg += `Telefone: ${phone}\n`;
   msg += `\n`;
-  msg += `🛒 *O QUE PEDIU:*\n`;
-  msg += `━━━━━━━━━━━━━━━━━\n`;
-  msg += `📦 *Marmitex R$${selectedSize.price}* × ${qty} unid.\n`;
-  msg += `🍖 *Proteína(s):* ${selectedProts.join(', ')}\n`;
-  msg += `🥘 *Acompanhamento(s):* ${selectedAcomp.join(', ')}\n`;
-  if (selectedSalada.length > 0) msg += `🥗 *Salada:* ${selectedSalada.join(', ')}\n`;
-  if (selectedBebidas.length > 0) msg += `🥤 *Bebidas:* ${selectedBebidas.join(', ')}\n`;
-  if (obs) msg += `📝 *Observação:* ${obs}\n`;
-  msg += `━━━━━━━━━━━━━━━━━\n`;
-  msg += `💰 *Total: R$${total},00*\n\n`;
-  msg += `✅ _Pedido enviado pelo site janderfelipe69.github.io_`;
+  msg += `*PEDIDO*\n`;
+  msg += `-----------------------------\n`;
+  msg += `Marmitex R$${selectedSize.price} x ${qty} unid.\n`;
+  msg += `Proteina(s): ${selectedProts.join(', ')}\n`;
+  msg += `Acompanhamento(s): ${selectedAcomp.join(', ')}\n`;
+  if (selectedSalada.length > 0) msg += `Salada: ${selectedSalada.join(', ')}\n`;
+  const bebWpp = Object.entries(selectedBebidas).map(([i, q]) => {
+    const b = menuData.bebidas[i];
+    return b ? `${b.nome}${q > 1 ? ` x${q}` : ''}` : '';
+  }).filter(Boolean);
+  if (bebWpp.length > 0) msg += `Bebidas: ${bebWpp.join(', ')}\n`;
+  if (obs) msg += `Observacao: ${obs}\n`;
+  msg += `-----------------------------\n`;
+  msg += `*TOTAL: R$${total},00*\n\n`;
+  msg += `Pedido feito pelo site. Aguardando confirmacao!`;
 
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
