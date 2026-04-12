@@ -20,358 +20,111 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
 
-body {
-  font-family: 'Barlow', sans-serif;
-  background: var(--cream);
-  color: var(--navy);
-  overflow-x: hidden;
-}
-
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--navy); }
 ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 10px; }
 
-/* ── NAV ── */
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5vw;
-  height: 70px;
-  background: rgba(20,33,61,0.95);
+  padding: 0 5vw; height: 70px;
+  background: rgba(20,33,61,0.97);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(232,119,34,0.2);
 }
-
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-icon {
-  width: 38px; height: 38px;
-  background: var(--orange);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
+.nav-logo-icon { width: 38px; height: 38px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .nav-logo-icon svg { width: 22px; height: 22px; fill: white; }
 .nav-logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--orange); letter-spacing: 1px; }
 .nav-logo-sub { font-size: 9px; color: #8899bb; letter-spacing: 1.5px; text-transform: uppercase; }
-
 .nav-links { display: flex; gap: 2rem; list-style: none; }
-.nav-links a {
-  color: #aabbd4; font-size: 13px; font-weight: 500;
-  text-decoration: none; letter-spacing: 1px; text-transform: uppercase;
-  transition: color 0.2s;
-}
+.nav-links a { color: #aabbd4; font-size: 13px; font-weight: 500; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
 .nav-links a:hover { color: var(--orange); }
+.nav-cta { background: var(--orange); color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: 600 !important; transition: background 0.2s !important; }
+.nav-cta:hover { background: var(--orange-dark) !important; }
 
-.nav-cta {
-  background: var(--orange); color: white !important;
-  padding: 8px 18px; border-radius: 4px;
-  font-weight: 600 !important; letter-spacing: 0.5px !important;
-  transition: background 0.2s !important;
-}
-.nav-cta:hover { background: var(--orange-dark) !important; color: white !important; }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+.nav-hamburger span { display: block; width: 24px; height: 2px; background: #aabbd4; border-radius: 2px; }
+.nav-mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(20,33,61,0.99); padding: 1.5rem 5vw; flex-direction: column; gap: 0; border-bottom: 1px solid rgba(232,119,34,0.2); z-index: 99; }
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-menu a { color: #aabbd4; font-size: 15px; font-weight: 500; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.nav-mobile-menu a:last-child { border-bottom: none; color: var(--orange); margin-top: 0.5rem; }
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  background: var(--navy);
-  position: relative;
-  display: flex; align-items: center;
-  overflow: hidden;
-  padding: 0 5vw;
-}
-
-.hero-bg-pattern {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px);
-}
-
-.hero-glow {
-  position: absolute;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,119,34,0.15) 0%, transparent 70%);
-  right: -100px; top: 50%; transform: translateY(-50%);
-  pointer-events: none;
-}
-
+/* HERO */
+.hero { min-height: 100vh; background: var(--navy); position: relative; display: flex; align-items: center; overflow: hidden; padding: 0 5vw; }
+.hero-bg-pattern { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px), repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px); }
+.hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(232,119,34,0.15) 0%, transparent 70%); right: -100px; top: 50%; transform: translateY(-50%); pointer-events: none; }
 .hero-content { position: relative; z-index: 2; max-width: 640px; }
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(232,119,34,0.12);
-  border: 1px solid rgba(232,119,34,0.3);
-  color: var(--orange); font-size: 11px; letter-spacing: 2px;
-  text-transform: uppercase; padding: 6px 14px; border-radius: 20px;
-  margin-bottom: 2rem;
-  animation: fadeUp 0.6s ease both;
-}
-.hero-badge::before {
-  content: ''; width: 6px; height: 6px;
-  background: var(--orange); border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(64px, 9vw, 120px);
-  color: white; line-height: 0.9;
-  margin-bottom: 1.5rem;
-  animation: fadeUp 0.6s 0.1s ease both;
-}
-
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,119,34,0.12); border: 1px solid rgba(232,119,34,0.3); color: var(--orange); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 2rem; animation: fadeUp 0.6s ease both; }
+.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 9vw, 120px); color: white; line-height: 0.9; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.1s ease both; }
 .hero-title span { color: var(--orange); }
-
-.hero-tagline {
-  font-size: 18px; font-weight: 300; color: #aabbd4;
-  line-height: 1.6; margin-bottom: 2.5rem;
-  animation: fadeUp 0.6s 0.2s ease both;
-  max-width: 480px;
-}
-
+.hero-tagline { font-size: 18px; font-weight: 300; color: #aabbd4; line-height: 1.6; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.2s ease both; max-width: 480px; }
 .hero-tagline strong { color: white; font-weight: 500; }
-
-.hero-buttons {
-  display: flex; gap: 1rem; flex-wrap: wrap;
-  animation: fadeUp 0.6s 0.3s ease both;
-}
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--orange); color: white;
-  padding: 14px 28px; border-radius: 6px;
-  font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
-  text-decoration: none; border: none; cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: white; padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; }
 .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
-
-.btn-outline {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; color: white;
-  padding: 14px 28px; border-radius: 6px;
-  font-size: 14px; font-weight: 500; letter-spacing: 0.5px;
-  text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
-  transition: border-color 0.2s, background 0.2s, transform 0.15s;
-}
+.btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: white; padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; text-decoration: none; border: 1px solid rgba(255,255,255,0.25); transition: border-color 0.2s, background 0.2s, transform 0.15s; }
 .btn-outline:hover { border-color: var(--orange); background: rgba(232,119,34,0.08); transform: translateY(-2px); }
-
-.hero-visual {
-  position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
-  z-index: 1;
-  animation: fadeUp 0.8s 0.4s ease both;
-}
-
-.big-logo-circle {
-  width: 340px; height: 340px;
-  border-radius: 50%;
-  border: 2px solid rgba(232,119,34,0.2);
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-}
-.big-logo-circle::before {
-  content: '';
-  position: absolute; inset: 16px;
-  border-radius: 50%;
-  border: 1px dashed rgba(232,119,34,0.15);
-  animation: spin 20s linear infinite;
-}
-.big-logo-circle::after {
-  content: '';
-  position: absolute; inset: -20px;
-  border-radius: 50%;
-  border: 1px solid rgba(232,119,34,0.08);
-}
+.hero-visual { position: absolute; right: 5vw; top: 50%; transform: translateY(-50%); z-index: 1; animation: fadeUp 0.8s 0.4s ease both; }
+.big-logo-circle { width: 340px; height: 340px; border-radius: 50%; border: 2px solid rgba(232,119,34,0.2); display: flex; align-items: center; justify-content: center; position: relative; }
+.big-logo-circle::before { content: ''; position: absolute; inset: 16px; border-radius: 50%; border: 1px dashed rgba(232,119,34,0.15); animation: spin 20s linear infinite; }
+.big-logo-circle::after { content: ''; position: absolute; inset: -20px; border-radius: 50%; border: 1px solid rgba(232,119,34,0.08); }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.big-logo-inner {
-  width: 220px; height: 220px;
-  background: var(--orange);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-}
+.big-logo-inner { width: 220px; height: 220px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .big-logo-inner svg { width: 120px; height: 120px; fill: white; }
-
-.hero-stats {
-  position: absolute; bottom: 3rem; left: 5vw; right: 5vw;
-  display: flex; gap: 2px;
-  animation: fadeUp 0.6s 0.5s ease both;
-  z-index: 2;
-}
-
-.stat {
-  flex: 1; padding: 1.25rem 1.5rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 6px;
-}
+.hero-stats { position: absolute; bottom: 3rem; left: 5vw; right: 5vw; display: flex; gap: 2px; animation: fadeUp 0.6s 0.5s ease both; z-index: 2; }
+.stat { flex: 1; padding: 1.25rem 1.5rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; }
 .stat:first-child { border-radius: 6px 0 0 6px; }
 .stat:last-child { border-radius: 0 6px 6px 0; }
-
 .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--orange); line-height: 1; }
 .stat-label { font-size: 11px; color: #667; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── SERVIÇOS ── */
+/* SERVIÇOS */
 .section { padding: 6rem 5vw; }
 .section-dark { background: var(--navy); }
 .section-light { background: var(--cream); }
-
-.section-label {
-  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--orange); font-weight: 600; margin-bottom: 0.75rem;
-}
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(36px, 5vw, 60px);
-  line-height: 1; margin-bottom: 1rem;
-}
+.section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); font-weight: 600; margin-bottom: 0.75rem; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 60px); line-height: 1; margin-bottom: 1rem; }
 .section-dark .section-title { color: white; }
 .section-light .section-title { color: var(--navy); }
 .section-subtitle { font-size: 16px; font-weight: 300; line-height: 1.7; max-width: 500px; }
 .section-dark .section-subtitle { color: #8899bb; }
 .section-light .section-subtitle { color: #556; }
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5px;
-  margin-top: 4rem;
-  border: 1.5px solid rgba(232,119,34,0.15);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.service-card {
-  background: rgba(255,255,255,0.03);
-  padding: 2.5rem 2rem;
-  border-right: 1.5px solid rgba(232,119,34,0.1);
-  border-bottom: 1.5px solid rgba(232,119,34,0.1);
-  transition: background 0.25s;
-  position: relative; overflow: hidden;
-}
-.service-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; background: var(--orange);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s ease;
-}
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5px; margin-top: 4rem; border: 1.5px solid rgba(232,119,34,0.15); border-radius: 8px; overflow: hidden; }
+.service-card { background: rgba(255,255,255,0.03); padding: 2.5rem 2rem; border-right: 1.5px solid rgba(232,119,34,0.1); border-bottom: 1.5px solid rgba(232,119,34,0.1); transition: background 0.25s; position: relative; overflow: hidden; }
+.service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
 .service-card:hover::before { transform: scaleX(1); }
 .service-card:hover { background: rgba(232,119,34,0.05); }
-
-.service-icon {
-  width: 52px; height: 52px;
-  background: var(--orange-glow);
-  border: 1px solid rgba(232,119,34,0.3);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1.5rem;
-}
+.service-icon { width: 52px; height: 52px; background: var(--orange-glow); border: 1px solid rgba(232,119,34,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
 .service-icon svg { width: 26px; height: 26px; fill: var(--orange); }
-
 .service-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: white; letter-spacing: 1px; margin-bottom: 0.75rem; }
 .service-desc { font-size: 14px; color: #7788aa; line-height: 1.7; font-weight: 300; }
+.service-tag { display: inline-block; margin-top: 1.25rem; background: rgba(232,119,34,0.1); color: var(--orange); font-size: 11px; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
 
-.service-tag {
-  display: inline-block;
-  margin-top: 1.25rem;
-  background: rgba(232,119,34,0.1);
-  color: var(--orange); font-size: 11px; letter-spacing: 1px;
-  padding: 4px 12px; border-radius: 20px; text-transform: uppercase;
-}
-
-/* ── CALCULADORA ── */
-.calc-section {
-  background: var(--navy);
-  padding: 6rem 5vw;
-  position: relative; overflow: hidden;
-}
-.calc-section::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent, transparent 20px,
-    rgba(232,119,34,0.03) 20px, rgba(232,119,34,0.03) 21px
-  );
-  pointer-events: none;
-}
-
-.calc-wrapper {
-  position: relative; z-index: 1;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
-}
-
-.calc-form {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(232,119,34,0.15);
-  border-radius: 12px; padding: 2.5rem;
-}
-
+/* CALCULADORA */
+.calc-section { background: var(--navy); padding: 6rem 5vw; position: relative; overflow: hidden; }
+.calc-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(232,119,34,0.03) 20px, rgba(232,119,34,0.03) 21px); pointer-events: none; }
+.calc-wrapper { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+.calc-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.15); border-radius: 12px; padding: 2.5rem; }
 .calc-field { margin-bottom: 1.25rem; }
-.calc-field label {
-  display: block; font-size: 11px; letter-spacing: 1.5px;
-  text-transform: uppercase; color: #667; margin-bottom: 8px;
-}
-.calc-field input {
-  width: 100%; padding: 13px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px; color: white; font-family: 'Barlow', sans-serif; font-size: 15px;
-  transition: border-color 0.2s;
-  outline: none;
-}
+.calc-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #667; margin-bottom: 8px; }
+.calc-field input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; font-family: 'Barlow', sans-serif; font-size: 15px; transition: border-color 0.2s; outline: none; }
 .calc-field input::placeholder { color: #445; }
 .calc-field input:focus { border-color: var(--orange); background: rgba(232,119,34,0.05); }
-
-.calc-divider {
-  display: flex; align-items: center; gap: 1rem;
-  margin: 0.5rem 0; color: var(--orange);
-}
-.calc-divider::before, .calc-divider::after {
-  content: ''; flex: 1; height: 1px; background: rgba(232,119,34,0.15);
-}
-
-.calc-rate {
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(232,119,34,0.08);
-  border: 1px solid rgba(232,119,34,0.2);
-  border-radius: 6px; padding: 12px 16px;
-  margin-bottom: 1.5rem;
-}
-.calc-rate-label { font-size: 12px; color: #7788aa; }
-.calc-rate-value { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--orange); letter-spacing: 1px; }
-
-.btn-calc {
-  width: 100%; padding: 15px;
-  background: var(--orange); color: white; border: none; cursor: pointer;
-  border-radius: 6px; font-family: 'Barlow', sans-serif;
-  font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  transition: background 0.2s, transform 0.15s;
-}
+.calc-field input.invalid { border-color: #e55; }
+.calc-divider { display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0; color: var(--orange); }
+.calc-divider::before, .calc-divider::after { content: ''; flex: 1; height: 1px; background: rgba(232,119,34,0.15); }
+.btn-calc { width: 100%; padding: 15px; background: var(--orange); color: white; border: none; cursor: pointer; border-radius: 6px; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s, transform 0.15s; margin-top: 0.5rem; }
 .btn-calc:hover { background: var(--orange-dark); transform: translateY(-1px); }
 .btn-calc:disabled { background: #334; cursor: default; transform: none; }
-
-.calc-result {
-  margin-top: 1.5rem;
-  background: linear-gradient(135deg, rgba(232,119,34,0.1), rgba(20,33,61,0.5));
-  border: 1px solid rgba(232,119,34,0.3);
-  border-radius: 8px; padding: 1.5rem;
-  display: none;
-}
+.calc-result { margin-top: 1.5rem; background: linear-gradient(135deg, rgba(232,119,34,0.1), rgba(20,33,61,0.5)); border: 1px solid rgba(232,119,34,0.3); border-radius: 8px; padding: 1.5rem; display: none; }
 .calc-result.show { display: block; animation: fadeUp 0.4s ease; }
 .result-route { font-size: 12px; color: #7788aa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
 .result-route span { color: var(--orange); }
@@ -380,160 +133,112 @@ nav {
 .result-item-label { font-size: 10px; color: #556; letter-spacing: 1px; text-transform: uppercase; }
 .result-item-value { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: white; line-height: 1.2; }
 .result-item-unit { font-size: 11px; color: #556; }
-.result-total-row {
-  background: var(--orange);
-  border-radius: 6px; padding: 1.25rem;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.result-total-label { font-size: 13px; color: rgba(255,255,255,0.7); }
-.result-total-value { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: white; letter-spacing: 1px; }
+.result-cta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: var(--orange); border-radius: 6px; padding: 1.25rem; text-decoration: none; transition: background 0.2s; }
+.result-cta:hover { background: var(--orange-dark); }
+.result-cta-label { font-size: 13px; color: rgba(255,255,255,0.85); }
+.result-cta-action { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: white; letter-spacing: 1px; }
 .result-note { font-size: 11px; color: #556; text-align: center; margin-top: 0.75rem; }
-
 .calc-info { padding-top: 1rem; }
 .calc-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: white; line-height: 1; margin-bottom: 1rem; }
 .calc-info-title span { color: var(--orange); }
 .calc-info-text { font-size: 15px; color: #7788aa; line-height: 1.8; font-weight: 300; margin-bottom: 2rem; }
-
 .info-items { display: flex; flex-direction: column; gap: 1rem; }
-.info-item {
-  display: flex; align-items: flex-start; gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255,255,255,0.03);
-  border-left: 3px solid var(--orange);
-  border-radius: 0 6px 6px 0;
-}
+.info-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.03); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; }
 .info-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
 .info-item-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 2px; }
 .info-item-desc { font-size: 13px; color: #667; line-height: 1.5; }
+.err-msg { color: #e55; font-size: 13px; margin-top: 0.75rem; display: none; padding: 10px 14px; background: rgba(229,85,85,0.08); border-radius: 6px; border-left: 3px solid #e55; line-height: 1.5; }
+.load-msg { color: var(--orange); font-size: 13px; text-align: center; margin-top: 0.75rem; display: none; }
 
-.err-msg { color: #e55; font-size: 12px; margin-top: 0.5rem; display: none; }
-.load-msg { color: var(--orange); font-size: 13px; text-align: center; margin-top: 0.5rem; display: none; }
-
-/* ── COMO FUNCIONA ── */
+/* COMO FUNCIONA */
 .steps-section { padding: 6rem 5vw; background: var(--cream); }
 .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 4rem; }
-
-.step {
-  position: relative; padding-top: 1rem;
-}
-.step-num {
-  font-family: 'Bebas Neue', sans-serif; font-size: 80px;
-  color: rgba(232,119,34,0.1); line-height: 1;
-  position: absolute; top: 0; left: 0;
-  user-select: none; pointer-events: none;
-}
+.step { position: relative; padding-top: 1rem; }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: rgba(232,119,34,0.1); line-height: 1; position: absolute; top: 0; left: 0; user-select: none; pointer-events: none; }
 .step-content { padding-top: 2.5rem; padding-left: 0.5rem; position: relative; }
-.step-icon {
-  width: 44px; height: 44px;
-  background: var(--navy); border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1rem;
-}
+.step-icon { width: 44px; height: 44px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
 .step-icon svg { width: 22px; height: 22px; fill: var(--orange); }
 .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.5px; }
 .step-desc { font-size: 14px; color: #667; line-height: 1.7; font-weight: 300; }
-.step-connector {
-  display: none;
-}
 
-/* ── CONTATO ── */
-.contact-section {
-  background: var(--navy); padding: 6rem 5vw;
-  position: relative; overflow: hidden;
-}
-.contact-section::after {
-  content: 'JB';
-  position: absolute; right: 3vw; bottom: -2rem;
-  font-family: 'Bebas Neue', sans-serif; font-size: 280px;
-  color: rgba(255,255,255,0.02); line-height: 1;
-  pointer-events: none; user-select: none;
-}
+/* DEPOIMENTOS */
+.testimonials-section { background: var(--navy); padding: 6rem 5vw; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.testimonial-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12); border-radius: 10px; padding: 1.75rem; }
+.testimonial-stars { color: var(--orange); font-size: 14px; margin-bottom: 0.75rem; letter-spacing: 2px; }
+.testimonial-text { font-size: 14px; color: #8899bb; line-height: 1.7; font-weight: 300; margin-bottom: 1.25rem; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 10px; }
+.testimonial-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--orange-glow); border: 1px solid rgba(232,119,34,0.3); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--orange); flex-shrink: 0; }
+.testimonial-name { font-size: 14px; color: white; font-weight: 500; }
+.testimonial-city { font-size: 12px; color: #556; }
 
+/* CONTATO */
+.contact-section { background: var(--navy); padding: 6rem 5vw; position: relative; overflow: hidden; }
+.contact-section::after { content: 'JB'; position: absolute; right: 3vw; bottom: -2rem; font-family: 'Bebas Neue', sans-serif; font-size: 280px; color: rgba(255,255,255,0.02); line-height: 1; pointer-events: none; user-select: none; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; position: relative; z-index: 1; }
-
-.contact-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(232,119,34,0.15);
-  border-radius: 12px; padding: 2rem;
-  display: flex; flex-direction: column; gap: 1.5rem;
-}
-
-.contact-person {
-  display: flex; align-items: center; gap: 1rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.contact-avatar {
-  width: 56px; height: 56px;
-  background: var(--orange);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white;
-  flex-shrink: 0;
-}
+.contact-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.15); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-person { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.contact-avatar { width: 56px; height: 56px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white; flex-shrink: 0; }
 .contact-name { font-size: 18px; font-weight: 600; color: white; }
 .contact-role { font-size: 13px; color: #667; }
-
-.contact-item {
-  display: flex; align-items: center; gap: 12px;
-}
-.contact-item-icon {
-  width: 36px; height: 36px;
-  border-radius: 8px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.contact-item-icon.wa { background: rgba(37,211,102,0.15); }
+.contact-item { display: flex; align-items: center; gap: 12px; }
+.contact-item-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .contact-item-icon.email { background: rgba(232,119,34,0.12); }
 .contact-item-icon.skype { background: rgba(0,175,240,0.12); }
-.contact-item-icon svg { width: 18px; height: 18px; }
-
 .contact-item-label { font-size: 11px; color: #556; letter-spacing: 1px; text-transform: uppercase; }
 .contact-item-value { font-size: 15px; color: white; font-weight: 500; }
 .contact-item-value a { color: inherit; text-decoration: none; }
 .contact-item-value a:hover { color: var(--orange); }
-
 .wa-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
-.wa-btn-full {
-  display: flex; align-items: center; gap: 10px;
-  background: #1db954;
-  color: white; padding: 13px 20px; border-radius: 8px;
-  text-decoration: none; font-size: 15px; font-weight: 600;
-  transition: background 0.2s, transform 0.15s;
-}
+.wa-btn-full { display: flex; align-items: center; gap: 10px; background: #1db954; color: white; padding: 13px 20px; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 600; transition: background 0.2s, transform 0.15s; }
 .wa-btn-full:hover { background: #18a349; transform: translateY(-2px); }
 .wa-btn-full svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
 .wa-btn-full span { flex: 1; }
 .wa-btn-full .wa-num { font-size: 12px; opacity: 0.75; font-weight: 400; }
-
-.contact-info-side {}
 .contact-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: white; line-height: 1; margin-bottom: 1rem; }
 .contact-info-title span { color: var(--orange); }
 .contact-info-text { font-size: 15px; color: #7788aa; line-height: 1.8; font-weight: 300; margin-bottom: 2.5rem; }
-
 .area-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.area-tag {
-  background: rgba(232,119,34,0.08);
-  border: 1px solid rgba(232,119,34,0.2);
-  color: var(--orange); font-size: 12px; letter-spacing: 0.5px;
-  padding: 5px 14px; border-radius: 20px;
-}
+.area-tag { background: rgba(232,119,34,0.08); border: 1px solid rgba(232,119,34,0.2); color: var(--orange); font-size: 12px; letter-spacing: 0.5px; padding: 5px 14px; border-radius: 20px; }
 
-/* ── FOOTER ── */
-footer {
-  background: #0d1829; color: #445;
-  padding: 2.5rem 5vw;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 1rem;
-  font-size: 12px; letter-spacing: 0.5px;
-}
+/* SOCIAL BUTTONS */
+.social-links { display: flex; gap: 0.6rem; align-items: center; }
+.social-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s, transform 0.15s; text-decoration: none; }
+.social-btn:hover { background: rgba(232,119,34,0.15); border-color: rgba(232,119,34,0.4); transform: translateY(-2px); }
+.social-btn svg { width: 18px; height: 18px; }
+.social-btn.insta:hover { background: rgba(225,48,108,0.15); border-color: rgba(225,48,108,0.4); }
+
+/* FAQ */
+.faq-section { background: var(--cream); padding: 6rem 5vw; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3rem; }
+.faq-item { background: white; border: 1px solid rgba(20,33,61,0.08); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.faq-question { width: 100%; background: none; border: none; text-align: left; padding: 1.25rem 1.5rem; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; color: var(--navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.faq-question:hover { background: rgba(232,119,34,0.04); }
+.faq-arrow { font-size: 18px; color: var(--orange); transition: transform 0.25s; flex-shrink: 0; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+.faq-answer { font-size: 14px; color: #556; line-height: 1.7; padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+.faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.25rem; }
+
+/* FLOATING WHATSAPP */
+.wa-float { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+.wa-float-btn { width: 58px; height: 58px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; }
+.wa-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+.wa-float-btn svg { width: 30px; height: 30px; fill: white; }
+.wa-float-tip { background: var(--navy); color: white; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; white-space: nowrap; opacity: 0; transform: translateX(10px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
+.wa-float:hover .wa-float-tip { opacity: 1; transform: translateX(0); }
+
+/* FOOTER */
+footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px; letter-spacing: 0.5px; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
 .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--orange); }
 .footer-copy { color: #334; }
+.footer-social { display: flex; gap: 0.6rem; }
 
-/* ── SCROLL REVEAL ── */
+/* SCROLL REVEAL */
 .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .hero-visual { display: none; }
   .hero-stats { flex-wrap: wrap; }
@@ -541,12 +246,15 @@ footer {
   .calc-wrapper { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .faq-grid { grid-template-columns: 1fr; }
+  nav .social-links { display: none; }
 }
-
 @media (max-width: 600px) {
   .hero-title { font-size: 58px; }
   .hero-stats { bottom: 1.5rem; }
   .stat-num { font-size: 28px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -569,32 +277,50 @@ footer {
     <li><a href="#como-funciona">Como Funciona</a></li>
     <li><a href="#contato" class="nav-cta">Falar Agora</a></li>
   </ul>
+  <div class="social-links">
+    <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn insta" title="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
+    </a>
+    <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp">
+      <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="#servicos" onclick="toggleMenu()">Serviços</a>
+  <a href="#calcular" onclick="toggleMenu()">Calcular</a>
+  <a href="#como-funciona" onclick="toggleMenu()">Como Funciona</a>
+  <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" onclick="toggleMenu()">📸 Instagram</a>
+  <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" onclick="toggleMenu()">📢 Canal do WhatsApp</a>
+  <a href="#contato" onclick="toggleMenu()">Falar Agora →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="inicio">
   <div class="hero-bg-pattern"></div>
   <div class="hero-glow"></div>
-
   <div class="hero-content">
     <div class="hero-badge">Atendimento em toda a região</div>
     <h1 class="hero-title">Levo você<br><span>onde precisa</span></h1>
     <p class="hero-tagline">
       <strong>Translado entre cidades, entregas e serviços.</strong><br>
-      Conforto, pontualidade e segurança com R&nbsp;1,40 por km rodado.
+      Conforto, pontualidade e segurança onde você precisar.
     </p>
     <div class="hero-buttons">
       <a href="#calcular" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Calcular valor
+        Calcular distância
       </a>
-      <a href="#contato" class="btn-outline">
+      <a href="https://wa.me/5534998004215" target="_blank" class="btn-outline">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         WhatsApp
       </a>
     </div>
   </div>
-
   <div class="hero-visual">
     <div class="big-logo-circle">
       <div class="big-logo-inner">
@@ -602,11 +328,10 @@ footer {
       </div>
     </div>
   </div>
-
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-num">R$1,40</div>
-      <div class="stat-label">por km rodado</div>
+      <div class="stat-num">+5</div>
+      <div class="stat-label">anos de experiência</div>
     </div>
     <div class="stat">
       <div class="stat-num">24h</div>
@@ -630,7 +355,6 @@ footer {
     <h2 class="section-title">Nossos Serviços</h2>
     <p class="section-subtitle">Soluções completas de transporte para você e sua empresa.</p>
   </div>
-
   <div class="services-grid reveal">
     <div class="service-card">
       <div class="service-icon">
@@ -638,7 +362,7 @@ footer {
       </div>
       <div class="service-title">Translado entre cidades</div>
       <div class="service-desc">Viagens particulares de uma cidade a outra com conforto e segurança. Ideal para consultas médicas, compromissos de negócios e viagens pessoais.</div>
-      <span class="service-tag">Bababar / Transporte</span>
+      <span class="service-tag">Babacar / Transporte</span>
     </div>
     <div class="service-card">
       <div class="service-icon">
@@ -664,53 +388,46 @@ footer {
   <div class="calc-wrapper">
     <div class="calc-info reveal">
       <div class="section-label">Sem surpresas</div>
-      <h2 class="calc-info-title">Calcule o valor<br><span>da sua viagem</span></h2>
-      <p class="calc-info-text">Digite a cidade de origem e destino. O valor é calculado com base na distância real entre os pontos, a R$&nbsp;1,40 por km rodado.</p>
-
+      <h2 class="calc-info-title">Calcule a distância<br><span>da sua viagem</span></h2>
+      <p class="calc-info-text">Digite o endereço completo de partida e destino. A distância é calculada com base na localização real entre os pontos informados.</p>
       <div class="info-items">
         <div class="info-item">
           <div class="info-item-icon">📍</div>
           <div>
-            <div class="info-item-title">Distância real</div>
-            <div class="info-item-desc">Calculamos com base na localização geográfica das cidades informadas.</div>
+            <div class="info-item-title">Endereço completo</div>
+            <div class="info-item-desc">Informe a rua de partida e de destino para um resultado preciso.</div>
           </div>
         </div>
         <div class="info-item">
-          <div class="info-item-icon">💰</div>
+          <div class="info-item-icon">⏱️</div>
           <div>
-            <div class="info-item-title">Preço fixo por km</div>
-            <div class="info-item-desc">R$ 1,40 por km — simples, transparente e sem taxas escondidas.</div>
+            <div class="info-item-title">Tempo estimado</div>
+            <div class="info-item-desc">Estimamos o tempo de viagem com base na distância calculada.</div>
           </div>
         </div>
         <div class="info-item">
           <div class="info-item-icon">📞</div>
           <div>
             <div class="info-item-title">Confirme pelo WhatsApp</div>
-            <div class="info-item-desc">Após calcular, fale com o Jander para agendar sua viagem.</div>
+            <div class="info-item-desc">Após calcular, fale com o Jander para agendar e combinar o valor.</div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="reveal">
       <div class="calc-form">
         <div class="calc-field">
-          <label>Cidade de Origem</label>
-          <input type="text" id="origin" placeholder="Ex: Uberlândia, MG">
+          <label>Local de Partida <span style="color:var(--orange)">*</span></label>
+          <input type="text" id="origin" placeholder="Ex: Rua das Flores 123, Uberlândia, MG">
         </div>
         <div class="calc-divider">↓</div>
         <div class="calc-field">
-          <label>Cidade de Destino</label>
-          <input type="text" id="dest" placeholder="Ex: São Paulo, SP">
+          <label>Destino <span style="color:var(--orange)">*</span></label>
+          <input type="text" id="dest" placeholder="Ex: Av. Paulista 1000, São Paulo, SP">
         </div>
-        <div class="calc-rate">
-          <span class="calc-rate-label">Valor por km rodado</span>
-          <span class="calc-rate-value">R$ 1,40 / km</span>
-        </div>
-        <button class="btn-calc" id="calcBtn" onclick="calcular()">Calcular valor da viagem</button>
-        <div class="err-msg" id="errMsg">Não encontramos uma das cidades. Tente incluir o estado. Ex: "Uberlândia, MG"</div>
-        <div class="load-msg" id="loadMsg">Buscando distância...</div>
-
+        <button class="btn-calc" id="calcBtn" onclick="calcular()">Calcular distância</button>
+        <div class="err-msg" id="errMsg"></div>
+        <div class="load-msg" id="loadMsg">🔍 Buscando endereços...</div>
         <div class="calc-result" id="resultBox">
           <div class="result-route">Rota: <span id="routeLabel">—</span></div>
           <div class="result-grid">
@@ -725,11 +442,14 @@ footer {
               <div class="result-item-unit">em rodovia</div>
             </div>
           </div>
-          <div class="result-total-row">
-            <div class="result-total-label">Valor estimado</div>
-            <div class="result-total-value" id="totalVal">R$ —</div>
-          </div>
-          <div class="result-note">* Estimativa baseada em distância em linha reta. Confirme o valor final com o motorista.</div>
+          <a class="result-cta" href="https://wa.me/5534998004215" target="_blank">
+            <div>
+              <div class="result-cta-label">Gostou? Agende agora</div>
+              <div class="result-cta-action">Chamar no WhatsApp →</div>
+            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+          <div class="result-note">* Estimativa em linha reta. Confirme o valor com o motorista pelo WhatsApp.</div>
         </div>
       </div>
     </div>
@@ -743,24 +463,19 @@ footer {
     <h2 class="section-title" style="color:var(--navy);">Como funciona</h2>
     <p class="section-subtitle" style="margin: 0 auto;">Da sua solicitação até o destino, em 4 passos fáceis.</p>
   </div>
-
   <div class="steps-grid reveal">
     <div class="step">
       <div class="step-num">01</div>
       <div class="step-content">
-        <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
-        </div>
+        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
         <div class="step-title">Entre em contato</div>
-        <div class="step-desc">Mande uma mensagem no WhatsApp ou calcule o valor aqui no site antes de falar.</div>
+        <div class="step-desc">Mande uma mensagem no WhatsApp ou calcule a distância aqui no site antes de falar.</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">02</div>
       <div class="step-content">
-        <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-        </div>
+        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
         <div class="step-title">Agende a viagem</div>
         <div class="step-desc">Combine o horário, local de embarque e confirmamos tudo pelo WhatsApp.</div>
       </div>
@@ -768,9 +483,7 @@ footer {
     <div class="step">
       <div class="step-num">03</div>
       <div class="step-content">
-        <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
-        </div>
+        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
         <div class="step-title">Embarque tranquilo</div>
         <div class="step-desc">O Jander busca você no endereço combinado, pontualmente e com segurança.</div>
       </div>
@@ -778,12 +491,99 @@ footer {
     <div class="step">
       <div class="step-num">04</div>
       <div class="step-content">
-        <div class="step-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        </div>
+        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
         <div class="step-title">Chegue no destino</div>
         <div class="step-desc">Viagem confortável, direta e segura. Pague o valor combinado na chegada.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="testimonials-section" id="depoimentos">
+  <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
+    <div class="section-label">Quem já viajou</div>
+    <h2 class="section-title" style="color:white;">O que dizem<br><span style="color:var(--orange)">os clientes</span></h2>
+  </div>
+  <div class="testimonials-grid reveal">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Precisei ir a uma consulta em Uberaba e o Jander foi super pontual. Confortável, seguro e sem estresse. Recomendo muito!"</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">MA</div>
+        <div>
+          <div class="testimonial-name">Maria Aparecida</div>
+          <div class="testimonial-city">Uberlândia, MG</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Uso o serviço pra enviar encomendas para São Paulo toda semana. Sempre chega no prazo e o Jander avisa quando entregou. Confiança total."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">RS</div>
+        <div>
+          <div class="testimonial-name">Roberto Silva</div>
+          <div class="testimonial-city">Uberaba, MG</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Fui de Uberlândia até Brasília e a viagem foi ótima. Carro limpo, ar-condicionado gelado e paradas quando precisei. Melhor que pegar ônibus!"</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">CF</div>
+        <div>
+          <div class="testimonial-name">Carla Ferreira</div>
+          <div class="testimonial-city">Uberlândia, MG</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
+    <div class="section-label">Tire suas dúvidas</div>
+    <h2 class="section-title" style="color:var(--navy);">Perguntas<br><span style="color:var(--orange)">frequentes</span></h2>
+  </div>
+  <div class="faq-grid reveal">
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Como funciona o pagamento? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">O pagamento é combinado diretamente com o Jander pelo WhatsApp antes da viagem. Aceitamos dinheiro e Pix.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Atende em quais horários? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">O atendimento é feito 24 horas por dia, 7 dias por semana. Entre em contato pelo WhatsApp para verificar disponibilidade.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Posso enviar encomendas sem viajar junto? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">Sim! O serviço de entrega de encomendas é feito de forma independente. Você entrega o item e o Jander leva até o destinatário.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Qual o prazo para agendar? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">Para garantir o horário desejado, o ideal é agendar com pelo menos algumas horas de antecedência. Urgências são avaliadas conforme disponibilidade.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        O serviço atende fora do Triângulo Mineiro? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">Sim! Atendemos rotas para São Paulo, Brasília, Goiânia e outras cidades. Consulte pelo WhatsApp para destinos específicos.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Quantas pessoas cabem no veículo? <span class="faq-arrow">▾</span>
+      </button>
+      <div class="faq-answer">O veículo comporta até 4 passageiros confortavelmente, além de bagagem. Para grupos maiores, consulte disponibilidade.</div>
     </div>
   </div>
 </section>
@@ -808,7 +608,6 @@ footer {
         </div>
       </div>
     </div>
-
     <div class="reveal">
       <div class="contact-card">
         <div class="contact-person">
@@ -818,27 +617,33 @@ footer {
             <div class="contact-role">Motorista & Responsável</div>
           </div>
         </div>
-
         <div class="contact-item">
           <div class="contact-item-icon email">
             <svg viewBox="0 0 24 24" fill="#e87722" width="18" height="18"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           </div>
           <div>
             <div class="contact-item-label">E-mail</div>
-            <div class="contact-item-value"><a href="mailto:jbservicosencomendas@gmail.com">jbservicosencomendas@gmail.com</a></div>
+            <div class="contact-item-value"><a href="/cdn-cgi/l/email-protection#87ede5f4e2f5f1eee4e8f4e2e9e4e8eae2e9e3e6f4c7e0eae6eeeba9e4e8ea"><span class="__cf_email__" data-cfemail="f69c94859384809f959985939895999b9398929785b6919b979f9ad895999b">[email&#160;protected]</span></a></div>
           </div>
         </div>
-
         <div class="contact-item">
-          <div class="contact-item-icon skype">
-            <svg viewBox="0 0 24 24" fill="#00aff0" width="18" height="18"><path d="M12.069 18.874c-4.023 0-5.82-1.979-5.82-3.464 0-.765.561-1.296 1.333-1.296 1.723 0 1.273 2.477 4.487 2.477 1.641 0 2.55-.895 2.55-1.811 0-.551-.269-1.16-1.354-1.429l-3.576-.895c-2.88-.724-3.403-2.286-3.403-3.751 0-3.047 2.861-4.191 5.549-4.191 2.471 0 5.393 1.373 5.393 3.199 0 .784-.688 1.24-1.453 1.24-1.469 0-1.198-2.037-4.164-2.037-1.469 0-2.292.664-2.292 1.617s1.153 1.258 2.157 1.487l2.637.587c2.891.649 3.624 2.346 3.624 3.944 0 2.476-1.902 4.324-5.668 4.324zm10.918.982c-1.273 1.102-2.908 1.747-4.699 1.747-.932 0-1.819-.163-2.641-.476C14.395 21.712 13.218 22 11.98 22 5.366 22 0 16.634 0 10.02c0-1.239.188-2.433.535-3.558C.196 5.678 0 4.792 0 3.858 0 2.063.649.443 1.744-.828 2.84-2.1 4.399-2.7 6.107-2.7c.748 0 1.472.127 2.147.364C9.34-.921 10.637-1.5 12.02-1.5c6.614 0 11.98 5.366 11.98 11.98 0 1.357-.222 2.662-.625 3.881.263.798.402 1.647.402 2.525 0 1.756-.625 3.351-1.79 4.47z"/></svg>
+          <div class="contact-item-icon" style="background:rgba(225,48,108,0.12);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
           </div>
           <div>
-            <div class="contact-item-label">Skype</div>
-            <div class="contact-item-value">jbservicosencomendas</div>
+            <div class="contact-item-label">Instagram</div>
+            <div class="contact-item-value"><a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank">@jbtransporteseencomendas</a></div>
           </div>
         </div>
-
+        <div class="contact-item">
+          <div class="contact-item-icon" style="background:rgba(37,211,102,0.12);">
+            <svg viewBox="0 0 24 24" fill="#25d366" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <div>
+            <div class="contact-item-label">Canal WhatsApp</div>
+            <div class="contact-item-value"><a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank">Entrar no canal →</a></div>
+          </div>
+        </div>
         <div class="wa-buttons">
           <a class="wa-btn-full" href="https://wa.me/5534998004215" target="_blank">
             <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -856,32 +661,70 @@ footer {
   </div>
 </section>
 
+<!-- FLOATING WA -->
+<div class="wa-float">
+  <div class="wa-float-tip">Fale com o Jander agora</div>
+  <a class="wa-float-btn" href="https://wa.me/5534998004215" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
 <!-- FOOTER -->
 <footer>
-  <div>
-    <div class="footer-brand">JB Transportes</div>
-    <div style="font-size:11px; color:#334; margin-top:4px;">Encomendas & Serviços · Jander Borges</div>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">JB Transportes</div>
+      <div style="font-size:11px; color:#334; margin-top:4px;">Encomendas & Serviços · Jander Borges</div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn insta" title="Instagram" style="border-color:rgba(225,48,108,0.3);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
+      </a>
+      <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp" style="border-color:rgba(37,211,102,0.3);">
+        <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <a href="https://wa.me/5534998004215" target="_blank" class="social-btn" title="WhatsApp" style="border-color:rgba(37,211,102,0.3);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </a>
+    </div>
+    <div class="footer-copy">© 2025 JB Transportes. Todos os direitos reservados.</div>
   </div>
-  <div class="footer-copy">© 2025 JB Transportes. Todos os direitos reservados.</div>
 </footer>
 
 <script>
-/* CALCULADORA */
-const RATE = 1.40;
+/* FAQ */
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
 
+/* MENU MOBILE */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* CALCULADORA */
 async function calcular() {
   const origin = document.getElementById('origin').value.trim();
-  const dest = document.getElementById('dest').value.trim();
-  const err = document.getElementById('errMsg');
-  const load = document.getElementById('loadMsg');
+  const dest   = document.getElementById('dest').value.trim();
+  const err    = document.getElementById('errMsg');
+  const load   = document.getElementById('loadMsg');
   const result = document.getElementById('resultBox');
+  const oInput = document.getElementById('origin');
+  const dInput = document.getElementById('dest');
 
   err.style.display = 'none';
   result.classList.remove('show');
+  oInput.classList.remove('invalid');
+  dInput.classList.remove('invalid');
 
   if (!origin || !dest) {
-    err.textContent = 'Por favor, preencha os dois campos.';
+    err.textContent = 'Por favor, preencha o local de partida e o destino com o nome da rua.';
     err.style.display = 'block';
+    if (!origin) oInput.classList.add('invalid');
+    if (!dest)   dInput.classList.add('invalid');
     return;
   }
 
@@ -890,20 +733,18 @@ async function calcular() {
 
   try {
     const [a, b] = await Promise.all([geocode(origin), geocode(dest)]);
-    const km = haversine(a, b);
-    const total = km * RATE;
+    const km   = haversine(a, b);
     const mins = Math.round((km / 85) * 60);
-    const h = Math.floor(mins / 60);
-    const m = mins % 60;
-    const time = h === 0 ? `${m}min` : m === 0 ? `${h}h` : `${h}h ${m}min`;
+    const h    = Math.floor(mins / 60);
+    const m    = mins % 60;
+    const time = h === 0 ? m + 'min' : m === 0 ? h + 'h' : h + 'h ' + m + 'min';
 
-    document.getElementById('routeLabel').textContent = `${origin} → ${dest}`;
-    document.getElementById('distVal').textContent = Math.round(km).toLocaleString('pt-BR');
-    document.getElementById('timeVal').textContent = time;
-    document.getElementById('totalVal').textContent = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2})}`;
+    document.getElementById('routeLabel').textContent = origin + ' → ' + dest;
+    document.getElementById('distVal').textContent    = Math.round(km).toLocaleString('pt-BR');
+    document.getElementById('timeVal').textContent    = time;
     result.classList.add('show');
   } catch(e) {
-    err.textContent = 'Cidade não encontrada. Tente com o estado. Ex: "Uberlândia, MG"';
+    err.textContent = 'Endereço não encontrado. Tente incluir a cidade e o estado. Ex: "Rua das Flores 123, Uberlândia, MG"';
     err.style.display = 'block';
   }
 
@@ -912,34 +753,27 @@ async function calcular() {
 }
 
 async function geocode(place) {
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place + ', Brasil')}&format=json&limit=1`;
-  const res = await fetch(url, { headers: { 'Accept-Language': 'pt-BR', 'User-Agent': 'JBTransportes/1.0' } });
+  const url  = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(place + ', Brasil') + '&format=json&limit=1';
+  const res  = await fetch(url, { headers: { 'Accept-Language': 'pt-BR', 'User-Agent': 'JBTransportes/1.0' } });
   const data = await res.json();
   if (!data.length) throw new Error('not found');
   return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
 }
 
 function haversine(a, b) {
-  const R = 6371;
+  const R    = 6371;
   const dLat = (b.lat - a.lat) * Math.PI / 180;
   const dLon = (b.lon - a.lon) * Math.PI / 180;
-  const s = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)**2;
+  const s    = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
   return R * 2 * Math.asin(Math.sqrt(s));
 }
 
 /* SCROLL REVEAL */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.12 });
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-/* ENTER key no calc */
-['origin','dest'].forEach(id => {
-  document.getElementById(id).addEventListener('keypress', e => {
-    if (e.key === 'Enter') calcular();
-  });
-});
+document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 </script>
 </body>
 </html>
