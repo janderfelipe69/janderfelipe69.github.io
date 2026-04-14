@@ -6,262 +6,539 @@
 <title>JB Transportes – Encomendas & Serviços</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #14213d;
-  --navy-light: #1e2f57;
+  --navy: #0f1c36;
+  --navy-mid: #14213d;
+  --navy-light: #1a2d52;
   --orange: #e87722;
   --orange-dark: #c96210;
   --orange-glow: rgba(232,119,34,0.18);
-  --cream: #faf7f2;
-  --gray: #888;
-  --light: #f0ede8;
+  --cream: #f8f5f0;
+  --wa: #25d366;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
 
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--navy); }
 ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 10px; }
+
+/* BARRA DE PROGRESSO */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--orange), #ffb347);
+  z-index: 9999; transition: width 0.1s linear;
+}
 
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5vw; height: 70px;
-  background: rgba(20,33,61,0.97);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(232,119,34,0.2);
+  padding: 0 5vw; height: 68px;
+  background: rgba(15,28,54,0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(232,119,34,0.15);
+  transition: box-shadow 0.3s;
 }
+nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.35); }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-icon { width: 38px; height: 38px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.nav-logo-icon svg { width: 22px; height: 22px; fill: white; }
-.nav-logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--orange); letter-spacing: 1px; }
-.nav-logo-sub { font-size: 9px; color: #8899bb; letter-spacing: 1.5px; text-transform: uppercase; }
-.nav-links { display: flex; gap: 2rem; list-style: none; }
-.nav-links a { color: #aabbd4; font-size: 13px; font-weight: 500; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-.nav-links a:hover { color: var(--orange); }
-.nav-cta { background: var(--orange); color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: 600 !important; transition: background 0.2s !important; }
-.nav-cta:hover { background: var(--orange-dark) !important; }
+.nav-logo-icon {
+  width: 36px; height: 36px; background: var(--orange); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 16px rgba(232,119,34,0.4);
+}
+.nav-logo-icon svg { width: 20px; height: 20px; fill: white; }
+.nav-logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 21px; color: white; letter-spacing: 1.5px; }
+.nav-logo-sub { font-size: 9px; color: #5f7499; letter-spacing: 2px; text-transform: uppercase; }
+.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.nav-links a {
+  color: #8aa0bf; font-size: 12px; font-weight: 500; text-decoration: none;
+  letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s;
+  position: relative; padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--orange); transform: scaleX(0); transition: transform 0.25s;
+}
+.nav-links a:hover { color: white; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: var(--orange) !important; color: white !important;
+  padding: 9px 20px; border-radius: 6px; font-weight: 600 !important;
+  box-shadow: 0 0 20px rgba(232,119,34,0.3);
+}
+.nav-cta:hover { background: var(--orange-dark) !important; box-shadow: 0 0 28px rgba(232,119,34,0.5) !important; }
+.nav-cta::after { display: none !important; }
 
 .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
 .nav-hamburger span { display: block; width: 24px; height: 2px; background: #aabbd4; border-radius: 2px; }
-.nav-mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(20,33,61,0.99); padding: 1.5rem 5vw; flex-direction: column; gap: 0; border-bottom: 1px solid rgba(232,119,34,0.2); z-index: 99; }
+.nav-mobile-menu {
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: rgba(10,18,36,0.99); padding: 1.5rem 5vw;
+  flex-direction: column; border-bottom: 1px solid rgba(232,119,34,0.15); z-index: 99;
+  backdrop-filter: blur(20px);
+}
 .nav-mobile-menu.open { display: flex; }
-.nav-mobile-menu a { color: #aabbd4; font-size: 15px; font-weight: 500; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.nav-mobile-menu a {
+  color: #8aa0bf; font-size: 14px; font-weight: 500; text-decoration: none;
+  letter-spacing: 1.5px; text-transform: uppercase; padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05); transition: color 0.2s;
+}
+.nav-mobile-menu a:hover { color: var(--orange); }
 .nav-mobile-menu a:last-child { border-bottom: none; color: var(--orange); margin-top: 0.5rem; }
 
 /* HERO */
-.hero { min-height: 100vh; background: var(--navy); position: relative; display: flex; align-items: center; overflow: hidden; padding: 0 5vw; }
-.hero-bg-pattern { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px), repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(232,119,34,0.06) 60px); }
-.hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(232,119,34,0.15) 0%, transparent 70%); right: -100px; top: 50%; transform: translateY(-50%); pointer-events: none; }
-.hero-content { position: relative; z-index: 2; max-width: 640px; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,119,34,0.12); border: 1px solid rgba(232,119,34,0.3); color: var(--orange); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 2rem; animation: fadeUp 0.6s ease both; }
-.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
-.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 9vw, 120px); color: white; line-height: 0.9; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.1s ease both; }
-.hero-title span { color: var(--orange); }
-.hero-tagline { font-size: 18px; font-weight: 300; color: #aabbd4; line-height: 1.6; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.2s ease both; max-width: 480px; }
-.hero-tagline strong { color: white; font-weight: 500; }
-.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
-.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: white; padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; }
-.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
-.btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: white; padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; text-decoration: none; border: 1px solid rgba(255,255,255,0.25); transition: border-color 0.2s, background 0.2s, transform 0.15s; }
-.btn-outline:hover { border-color: var(--orange); background: rgba(232,119,34,0.08); transform: translateY(-2px); }
-.hero-visual { position: absolute; right: 5vw; top: 50%; transform: translateY(-50%); z-index: 1; animation: fadeUp 0.8s 0.4s ease both; }
-.big-logo-circle { width: 340px; height: 340px; border-radius: 50%; border: 2px solid rgba(232,119,34,0.2); display: flex; align-items: center; justify-content: center; position: relative; }
-.big-logo-circle::before { content: ''; position: absolute; inset: 16px; border-radius: 50%; border: 1px dashed rgba(232,119,34,0.15); animation: spin 20s linear infinite; }
-.big-logo-circle::after { content: ''; position: absolute; inset: -20px; border-radius: 50%; border: 1px solid rgba(232,119,34,0.08); }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.big-logo-inner { width: 220px; height: 220px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.big-logo-inner svg { width: 120px; height: 120px; fill: white; }
-.hero-stats { position: absolute; bottom: 3rem; left: 5vw; right: 5vw; display: flex; gap: 2px; animation: fadeUp 0.6s 0.5s ease both; z-index: 2; }
-.stat { flex: 1; padding: 1.25rem 1.5rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; }
-.stat:first-child { border-radius: 6px 0 0 6px; }
-.stat:last-child { border-radius: 0 6px 6px 0; }
-.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--orange); line-height: 1; }
-.stat-label { font-size: 11px; color: #667; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.hero {
+  min-height: 100vh; background: var(--navy); position: relative;
+  display: flex; align-items: center; overflow: hidden; padding: 0 5vw;
+  padding-top: 68px;
+}
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 60% at 75% 50%, rgba(232,119,34,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 80% at 0% 100%, rgba(20,40,80,0.6) 0%, transparent 60%);
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 620px; padding: 4rem 0; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232,119,34,0.08); border: 1px solid rgba(232,119,34,0.25);
+  color: var(--orange); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 30px; margin-bottom: 2rem;
+  animation: fadeUp 0.7s ease both;
+}
+.hero-badge-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.7); } }
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 10vw, 128px);
+  color: white; line-height: 0.88; margin-bottom: 1.75rem;
+  animation: fadeUp 0.7s 0.1s ease both; letter-spacing: 1px;
+}
+.hero-title span { color: var(--orange); display: block; }
+.hero-title em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+}
+.hero-tagline {
+  font-size: 17px; font-weight: 300; color: #7a90b0; line-height: 1.7;
+  margin-bottom: 2.75rem; animation: fadeUp 0.7s 0.2s ease both; max-width: 460px;
+}
+.hero-tagline strong { color: #c8d8ec; font-weight: 500; }
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--orange); color: white; padding: 15px 30px; border-radius: 8px;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 24px rgba(232,119,34,0.35);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(232,119,34,0.5); }
+.btn-wa {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--wa); color: white; padding: 15px 30px; border-radius: 8px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  box-shadow: 0 4px 24px rgba(37,211,102,0.25);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-wa:hover { background: #1db954; transform: translateY(-3px); box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+
+/* Visual decorativo hero */
+.hero-visual {
+  position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
+  z-index: 1; animation: fadeUp 0.9s 0.4s ease both;
+}
+.orb-wrap { position: relative; width: 360px; height: 360px; }
+.orb-ring {
+  position: absolute; border-radius: 50%; border: 1px solid rgba(232,119,34,0.15);
+  animation: spin 18s linear infinite;
+}
+.orb-ring:nth-child(1) { inset: 0; animation-duration: 18s; }
+.orb-ring:nth-child(2) { inset: 24px; border-style: dashed; border-color: rgba(232,119,34,0.08); animation-direction: reverse; animation-duration: 28s; }
+.orb-ring:nth-child(3) { inset: -20px; border-color: rgba(255,255,255,0.04); animation-duration: 40s; }
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+.orb-dot {
+  position: absolute; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--orange); box-shadow: 0 0 12px var(--orange);
+  top: 8px; left: 50%; margin-left: -5px;
+}
+.orb-core {
+  position: absolute; inset: 50px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e3260, #0c1628);
+  border: 1px solid rgba(232,119,34,0.2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 60px rgba(232,119,34,0.1), inset 0 0 40px rgba(0,0,0,0.3);
+}
+.orb-core svg { width: 100px; height: 100px; fill: var(--orange); opacity: 0.9; }
+.orb-label {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px;
+  color: rgba(232,119,34,0.4); white-space: nowrap;
+}
+
+/* Stats hero */
+.hero-stats {
+  display: flex; gap: 0; margin-top: 3rem;
+  animation: fadeUp 0.7s 0.5s ease both;
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden;
+}
+.stat {
+  flex: 1; padding: 1.25rem 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s;
+}
+.stat:last-child { border-right: none; }
+.stat:hover { background: rgba(232,119,34,0.05); }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--orange); line-height: 1; }
+.stat-label { font-size: 10px; color: #445; letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); font-weight: 600; margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content:''; width:20px; height:1px; background:var(--orange); }
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5.5vw, 64px);
+  line-height: 1; margin-bottom: 1rem;
+}
+.section-subtitle { font-size: 16px; font-weight: 300; line-height: 1.75; max-width: 520px; }
 
 /* SERVIÇOS */
-.section { padding: 6rem 5vw; }
-.section-dark { background: var(--navy); }
-.section-light { background: var(--cream); }
-.section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); font-weight: 600; margin-bottom: 0.75rem; }
-.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 60px); line-height: 1; margin-bottom: 1rem; }
-.section-dark .section-title { color: white; }
-.section-light .section-title { color: var(--navy); }
-.section-subtitle { font-size: 16px; font-weight: 300; line-height: 1.7; max-width: 500px; }
-.section-dark .section-subtitle { color: #8899bb; }
-.section-light .section-subtitle { color: #556; }
-.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5px; margin-top: 4rem; border: 1.5px solid rgba(232,119,34,0.15); border-radius: 8px; overflow: hidden; }
-.service-card { background: rgba(255,255,255,0.03); padding: 2.5rem 2rem; border-right: 1.5px solid rgba(232,119,34,0.1); border-bottom: 1.5px solid rgba(232,119,34,0.1); transition: background 0.25s; position: relative; overflow: hidden; }
-.service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
+.services-section { padding: 7rem 5vw; background: var(--navy-mid); }
+.services-section .section-title { color: white; }
+.services-section .section-subtitle { color: #6a80a0; }
+.services-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem; margin-top: 4rem;
+}
+.service-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 2.5rem 2rem;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, background 0.3s;
+}
+.service-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--orange), #ffb347);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+}
+.service-card:hover { transform: translateY(-6px); border-color: rgba(232,119,34,0.2); background: rgba(232,119,34,0.04); }
 .service-card:hover::before { transform: scaleX(1); }
-.service-card:hover { background: rgba(232,119,34,0.05); }
-.service-icon { width: 52px; height: 52px; background: var(--orange-glow); border: 1px solid rgba(232,119,34,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+.service-icon {
+  width: 54px; height: 54px;
+  background: rgba(232,119,34,0.1); border: 1px solid rgba(232,119,34,0.2);
+  border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem; transition: background 0.3s, box-shadow 0.3s;
+}
+.service-card:hover .service-icon { background: rgba(232,119,34,0.18); box-shadow: 0 0 20px rgba(232,119,34,0.2); }
 .service-icon svg { width: 26px; height: 26px; fill: var(--orange); }
-.service-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: white; letter-spacing: 1px; margin-bottom: 0.75rem; }
-.service-desc { font-size: 14px; color: #7788aa; line-height: 1.7; font-weight: 300; }
-.service-tag { display: inline-block; margin-top: 1.25rem; background: rgba(232,119,34,0.1); color: var(--orange); font-size: 11px; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
+.service-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: white; letter-spacing: 1px; margin-bottom: 0.75rem; }
+.service-desc { font-size: 14px; color: #6a80a0; line-height: 1.75; font-weight: 300; }
+.service-tag {
+  display: inline-block; margin-top: 1.5rem;
+  background: rgba(232,119,34,0.08); color: var(--orange);
+  font-size: 11px; letter-spacing: 1.5px; padding: 5px 14px;
+  border-radius: 30px; text-transform: uppercase; border: 1px solid rgba(232,119,34,0.15);
+}
+
+/* BANNER CTA */
+.cta-banner {
+  background: var(--orange); padding: 3rem 5vw;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+}
+.cta-banner-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 44px); color: white; line-height: 1.1; }
+.cta-banner-text span { opacity: 0.75; font-size: 0.6em; display: block; letter-spacing: 2px; text-transform: uppercase; font-family: 'Barlow', sans-serif; font-weight: 400; margin-bottom: 4px; }
+.btn-banner {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: white; color: var(--orange-dark); padding: 14px 28px; border-radius: 8px;
+  font-size: 15px; font-weight: 700; text-decoration: none; white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.btn-banner:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
 
 /* CALCULADORA */
-.calc-section { background: var(--navy); padding: 6rem 5vw; position: relative; overflow: hidden; }
-.calc-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(232,119,34,0.03) 20px, rgba(232,119,34,0.03) 21px); pointer-events: none; }
-.calc-wrapper { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-.calc-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.15); border-radius: 12px; padding: 2.5rem; }
+.calc-section { background: var(--navy); padding: 7rem 5vw; position: relative; overflow: hidden; }
+.calc-section::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(232,119,34,0.02) 30px, rgba(232,119,34,0.02) 31px);
+}
+.calc-wrapper { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.calc-info .section-title { color: white; }
+.calc-info .section-title span { color: var(--orange); }
+.calc-info-text { font-size: 15px; color: #6a80a0; line-height: 1.85; font-weight: 300; margin: 1.25rem 0 2rem; }
+.info-items { display: flex; flex-direction: column; gap: 1rem; }
+.info-item {
+  display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.25rem;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+  border-left: 3px solid var(--orange); border-radius: 0 10px 10px 0; transition: background 0.2s;
+}
+.info-item:hover { background: rgba(232,119,34,0.04); }
+.info-item-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.info-item-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 2px; }
+.info-item-desc { font-size: 13px; color: #5a7090; line-height: 1.5; }
+.calc-form {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12);
+  border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
 .calc-field { margin-bottom: 1.25rem; }
-.calc-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #667; margin-bottom: 8px; }
-.calc-field input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; font-family: 'Barlow', sans-serif; font-size: 15px; transition: border-color 0.2s; outline: none; }
-.calc-field input::placeholder { color: #445; }
-.calc-field input:focus { border-color: var(--orange); background: rgba(232,119,34,0.05); }
+.calc-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #5a7090; margin-bottom: 8px; }
+.calc-field input {
+  width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: white;
+  font-family: 'Barlow', sans-serif; font-size: 15px; transition: border-color 0.2s, background 0.2s; outline: none;
+}
+.calc-field input::placeholder { color: #334; }
+.calc-field input:focus { border-color: var(--orange); background: rgba(232,119,34,0.04); }
 .calc-field input.invalid { border-color: #e55; }
-.calc-divider { display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0; color: var(--orange); }
-.calc-divider::before, .calc-divider::after { content: ''; flex: 1; height: 1px; background: rgba(232,119,34,0.15); }
-.btn-calc { width: 100%; padding: 15px; background: var(--orange); color: white; border: none; cursor: pointer; border-radius: 6px; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: background 0.2s, transform 0.15s; margin-top: 0.5rem; }
-.btn-calc:hover { background: var(--orange-dark); transform: translateY(-1px); }
-.btn-calc:disabled { background: #334; cursor: default; transform: none; }
-.calc-result { margin-top: 1.5rem; background: linear-gradient(135deg, rgba(232,119,34,0.1), rgba(20,33,61,0.5)); border: 1px solid rgba(232,119,34,0.3); border-radius: 8px; padding: 1.5rem; display: none; }
+.calc-divider { display: flex; align-items: center; gap: 1rem; margin: 0.25rem 0; color: rgba(232,119,34,0.5); font-size: 18px; }
+.calc-divider::before, .calc-divider::after { content: ''; flex: 1; height: 1px; background: rgba(232,119,34,0.1); }
+.btn-calc {
+  width: 100%; padding: 16px; background: var(--orange); color: white; border: none; cursor: pointer;
+  border-radius: 8px; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; margin-top: 0.5rem;
+  box-shadow: 0 4px 20px rgba(232,119,34,0.3); transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-calc:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,119,34,0.45); }
+.err-msg {
+  color: #e55; font-size: 13px; margin-top: 0.75rem; display: none;
+  padding: 10px 14px; background: rgba(229,85,85,0.08); border-radius: 8px;
+  border-left: 3px solid #e55; line-height: 1.5;
+}
+.calc-result {
+  margin-top: 1.5rem; border-radius: 10px; padding: 1.5rem; display: none;
+  background: linear-gradient(135deg, rgba(232,119,34,0.08), rgba(15,28,54,0.6));
+  border: 1px solid rgba(232,119,34,0.25);
+}
 .calc-result.show { display: block; animation: fadeUp 0.4s ease; }
-.result-route { font-size: 12px; color: #7788aa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
-.result-route span { color: var(--orange); }
-.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-.result-item { text-align: center; }
-.result-item-label { font-size: 10px; color: #556; letter-spacing: 1px; text-transform: uppercase; }
-.result-item-value { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: white; line-height: 1.2; }
-.result-item-unit { font-size: 11px; color: #556; }
-.result-cta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: var(--orange); border-radius: 6px; padding: 1.25rem; text-decoration: none; transition: background 0.2s; }
-.result-cta:hover { background: var(--orange-dark); }
+.result-route { font-size: 12px; color: #6a80a0; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
+.result-route strong { color: var(--orange); }
+.result-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--wa); border-radius: 8px; padding: 1.25rem 1.5rem;
+  text-decoration: none; transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+}
+.result-cta:hover { background: #1db954; transform: translateY(-2px); }
 .result-cta-label { font-size: 13px; color: rgba(255,255,255,0.85); }
 .result-cta-action { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: white; letter-spacing: 1px; }
-.result-note { font-size: 11px; color: #556; text-align: center; margin-top: 0.75rem; }
-.calc-info { padding-top: 1rem; }
-.calc-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: white; line-height: 1; margin-bottom: 1rem; }
-.calc-info-title span { color: var(--orange); }
-.calc-info-text { font-size: 15px; color: #7788aa; line-height: 1.8; font-weight: 300; margin-bottom: 2rem; }
-.info-items { display: flex; flex-direction: column; gap: 1rem; }
-.info-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.03); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; }
-.info-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
-.info-item-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 2px; }
-.info-item-desc { font-size: 13px; color: #667; line-height: 1.5; }
-.err-msg { color: #e55; font-size: 13px; margin-top: 0.75rem; display: none; padding: 10px 14px; background: rgba(229,85,85,0.08); border-radius: 6px; border-left: 3px solid #e55; line-height: 1.5; }
-.load-msg { color: var(--orange); font-size: 13px; text-align: center; margin-top: 0.75rem; display: none; }
 
 /* COMO FUNCIONA */
-.steps-section { padding: 6rem 5vw; background: var(--cream); }
-.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 4rem; }
-.step { position: relative; padding-top: 1rem; }
-.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: rgba(232,119,34,0.1); line-height: 1; position: absolute; top: 0; left: 0; user-select: none; pointer-events: none; }
-.step-content { padding-top: 2.5rem; padding-left: 0.5rem; position: relative; }
-.step-icon { width: 44px; height: 44px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
-.step-icon svg { width: 22px; height: 22px; fill: var(--orange); }
-.step-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.5px; }
-.step-desc { font-size: 14px; color: #667; line-height: 1.7; font-weight: 300; }
+.steps-section { padding: 7rem 5vw; background: var(--cream); }
+.steps-section .section-title { color: var(--navy); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; margin-top: 4rem; position: relative; }
+.steps-grid::before {
+  content: ''; position: absolute; top: 36px; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,119,34,0.3), transparent); pointer-events: none;
+}
+.step { padding: 0 1.5rem; text-align: center; position: relative; }
+.step-num-wrap {
+  width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 1.5rem;
+  background: white; border: 2px solid rgba(232,119,34,0.2);
+  display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.step:hover .step-num-wrap { border-color: var(--orange); box-shadow: 0 0 28px rgba(232,119,34,0.2); transform: translateY(-4px); }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--orange); line-height: 1; }
+.step-icon-wrap { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.step-icon-wrap svg { width: 18px; height: 18px; fill: var(--orange); }
+.step-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+.step-desc { font-size: 13px; color: #778; line-height: 1.7; font-weight: 300; }
 
 /* DEPOIMENTOS */
-.testimonials-section { background: var(--navy); padding: 6rem 5vw; }
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-.testimonial-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12); border-radius: 10px; padding: 1.75rem; }
-.testimonial-stars { color: var(--orange); font-size: 14px; margin-bottom: 0.75rem; letter-spacing: 2px; }
-.testimonial-text { font-size: 14px; color: #8899bb; line-height: 1.7; font-weight: 300; margin-bottom: 1.25rem; font-style: italic; }
+.testimonials-section { background: var(--navy-mid); padding: 7rem 5vw; }
+.testimonials-section .section-title { color: white; }
+.testimonials-section .section-title span { color: var(--orange); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3.5rem; }
+.testimonial-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 2rem;
+  transition: transform 0.3s, border-color 0.3s; position: relative; overflow: hidden;
+}
+.testimonial-card::before {
+  content: '"'; position: absolute; top: -10px; right: 20px; font-size: 120px;
+  color: rgba(232,119,34,0.06); font-family: Georgia, serif; line-height: 1; pointer-events: none;
+}
+.testimonial-card:hover { transform: translateY(-4px); border-color: rgba(232,119,34,0.15); }
+.testimonial-stars { color: var(--orange); font-size: 13px; margin-bottom: 1rem; letter-spacing: 3px; }
+.testimonial-text { font-size: 14px; color: #7a90b0; line-height: 1.8; font-weight: 300; margin-bottom: 1.5rem; font-style: italic; }
 .testimonial-author { display: flex; align-items: center; gap: 10px; }
-.testimonial-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--orange-glow); border: 1px solid rgba(232,119,34,0.3); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--orange); flex-shrink: 0; }
+.testimonial-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(232,119,34,0.12); border: 1px solid rgba(232,119,34,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--orange); flex-shrink: 0;
+}
 .testimonial-name { font-size: 14px; color: white; font-weight: 500; }
-.testimonial-city { font-size: 12px; color: #556; }
-
-/* CONTATO */
-.contact-section { background: var(--navy); padding: 6rem 5vw; position: relative; overflow: hidden; }
-.contact-section::after { content: 'JB'; position: absolute; right: 3vw; bottom: -2rem; font-family: 'Bebas Neue', sans-serif; font-size: 280px; color: rgba(255,255,255,0.02); line-height: 1; pointer-events: none; user-select: none; }
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; position: relative; z-index: 1; }
-.contact-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.15); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
-.contact-person { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
-.contact-avatar { width: 56px; height: 56px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white; flex-shrink: 0; }
-.contact-name { font-size: 18px; font-weight: 600; color: white; }
-.contact-role { font-size: 13px; color: #667; }
-.contact-item { display: flex; align-items: center; gap: 12px; }
-.contact-item-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.contact-item-icon.email { background: rgba(232,119,34,0.12); }
-.contact-item-icon.skype { background: rgba(0,175,240,0.12); }
-.contact-item-label { font-size: 11px; color: #556; letter-spacing: 1px; text-transform: uppercase; }
-.contact-item-value { font-size: 15px; color: white; font-weight: 500; }
-.contact-item-value a { color: inherit; text-decoration: none; }
-.contact-item-value a:hover { color: var(--orange); }
-.wa-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
-.wa-btn-full { display: flex; align-items: center; gap: 10px; background: #1db954; color: white; padding: 13px 20px; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 600; transition: background 0.2s, transform 0.15s; }
-.wa-btn-full:hover { background: #18a349; transform: translateY(-2px); }
-.wa-btn-full svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
-.wa-btn-full span { flex: 1; }
-.wa-btn-full .wa-num { font-size: 12px; opacity: 0.75; font-weight: 400; }
-.contact-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: white; line-height: 1; margin-bottom: 1rem; }
-.contact-info-title span { color: var(--orange); }
-.contact-info-text { font-size: 15px; color: #7788aa; line-height: 1.8; font-weight: 300; margin-bottom: 2.5rem; }
-.area-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.area-tag { background: rgba(232,119,34,0.08); border: 1px solid rgba(232,119,34,0.2); color: var(--orange); font-size: 12px; letter-spacing: 0.5px; padding: 5px 14px; border-radius: 20px; }
-
-/* SOCIAL BUTTONS */
-.social-links { display: flex; gap: 0.6rem; align-items: center; }
-.social-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s, transform 0.15s; text-decoration: none; }
-.social-btn:hover { background: rgba(232,119,34,0.15); border-color: rgba(232,119,34,0.4); transform: translateY(-2px); }
-.social-btn svg { width: 18px; height: 18px; }
-.social-btn.insta:hover { background: rgba(225,48,108,0.15); border-color: rgba(225,48,108,0.4); }
+.testimonial-city { font-size: 12px; color: #445; }
 
 /* FAQ */
-.faq-section { background: var(--cream); padding: 6rem 5vw; }
-.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3rem; }
-.faq-item { background: white; border: 1px solid rgba(20,33,61,0.08); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.faq-question { width: 100%; background: none; border: none; text-align: left; padding: 1.25rem 1.5rem; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600; color: var(--navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-.faq-question:hover { background: rgba(232,119,34,0.04); }
-.faq-arrow { font-size: 18px; color: var(--orange); transition: transform 0.25s; flex-shrink: 0; }
+.faq-section { background: var(--cream); padding: 7rem 5vw; }
+.faq-section .section-title { color: var(--navy); }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
+.faq-item {
+  background: white; border: 1px solid rgba(20,33,61,0.07); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: box-shadow 0.2s;
+}
+.faq-item:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.faq-question {
+  width: 100%; background: none; border: none; text-align: left; padding: 1.25rem 1.5rem;
+  font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 600; color: var(--navy);
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: color 0.2s;
+}
+.faq-question:hover { color: var(--orange); }
+.faq-arrow { font-size: 16px; color: var(--orange); transition: transform 0.3s; flex-shrink: 0; }
 .faq-item.open .faq-arrow { transform: rotate(180deg); }
-.faq-answer { font-size: 14px; color: #556; line-height: 1.7; padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+.faq-answer { font-size: 14px; color: #667; line-height: 1.75; padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
 .faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.25rem; }
 
-/* FLOATING WHATSAPP */
-.wa-float { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
-.wa-float-btn { width: 58px; height: 58px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; }
-.wa-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
-.wa-float-btn svg { width: 30px; height: 30px; fill: white; }
-.wa-float-tip { background: var(--navy); color: white; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; white-space: nowrap; opacity: 0; transform: translateX(10px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
+/* CONTATO */
+.contact-section { background: var(--navy); padding: 7rem 5vw; position: relative; overflow: hidden; }
+.contact-section::after {
+  content: 'JB'; position: absolute; right: 2vw; bottom: -3rem;
+  font-family: 'Bebas Neue', sans-serif; font-size: 300px;
+  color: rgba(255,255,255,0.015); line-height: 1; pointer-events: none; user-select: none;
+}
+.contact-section .section-title { color: white; }
+.contact-section .section-title span { color: var(--orange); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; position: relative; z-index: 1; }
+.contact-info-text { font-size: 15px; color: #6a80a0; line-height: 1.85; font-weight: 300; margin: 1rem 0 2rem; }
+.area-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.area-tag {
+  background: rgba(232,119,34,0.07); border: 1px solid rgba(232,119,34,0.18);
+  color: var(--orange); font-size: 12px; letter-spacing: 0.5px; padding: 5px 14px; border-radius: 30px; transition: background 0.2s;
+}
+.area-tag:hover { background: rgba(232,119,34,0.14); }
+.contact-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12);
+  border-radius: 20px; padding: 2.25rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.contact-person {
+  display: flex; align-items: center; gap: 1.1rem;
+  padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.contact-avatar {
+  width: 58px; height: 58px; background: var(--orange); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: white; flex-shrink: 0;
+  box-shadow: 0 0 24px rgba(232,119,34,0.35);
+}
+.contact-name { font-size: 19px; font-weight: 600; color: white; }
+.contact-role { font-size: 13px; color: #5a7090; }
+.contact-item { display: flex; align-items: center; gap: 14px; }
+.contact-item-icon { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.contact-item-label { font-size: 10px; color: #445; letter-spacing: 1.5px; text-transform: uppercase; }
+.contact-item-value { font-size: 15px; color: white; font-weight: 500; }
+.contact-item-value a { color: inherit; text-decoration: none; transition: color 0.2s; }
+.contact-item-value a:hover { color: var(--orange); }
+.wa-btn-full {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--wa); color: white; padding: 15px 22px;
+  border-radius: 12px; text-decoration: none; font-size: 15px; font-weight: 600;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.2);
+}
+.wa-btn-full:hover { background: #1db954; transform: translateY(-3px); box-shadow: 0 8px 30px rgba(37,211,102,0.35); }
+.wa-btn-full svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+.wa-btn-full span { flex: 1; }
+.wa-num { font-size: 13px; opacity: 0.75; font-weight: 400; }
+
+/* BOTÃO FLUTUANTE WA */
+.wa-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; }
+.wa-float-tip {
+  background: var(--navy-mid); color: white; font-size: 12px; font-weight: 500;
+  padding: 6px 14px; border-radius: 30px; white-space: nowrap;
+  opacity: 0; transform: translateX(10px); transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none; border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
 .wa-float:hover .wa-float-tip { opacity: 1; transform: translateX(0); }
+.wa-float-btn {
+  width: 60px; height: 60px; border-radius: 50%; background: var(--wa);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 24px rgba(37,211,102,0.45);
+  transition: transform 0.25s, box-shadow 0.25s; text-decoration: none;
+  animation: waPulse 3s infinite;
+}
+.wa-float-btn:hover { transform: scale(1.12); box-shadow: 0 8px 36px rgba(37,211,102,0.6); }
+.wa-float-btn svg { width: 32px; height: 32px; fill: white; }
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 4px 24px rgba(37,211,102,0.45); }
+  50% { box-shadow: 0 4px 36px rgba(37,211,102,0.7), 0 0 0 8px rgba(37,211,102,0.1); }
+}
+
+/* SOCIAL */
+.social-links { display: flex; gap: 0.5rem; align-items: center; }
+.social-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s, transform 0.15s; text-decoration: none;
+}
+.social-btn:hover { background: rgba(232,119,34,0.12); border-color: rgba(232,119,34,0.3); transform: translateY(-2px); }
+.social-btn svg { width: 16px; height: 16px; }
 
 /* FOOTER */
-footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px; letter-spacing: 0.5px; }
+footer { background: #080f1e; padding: 2.5rem 5vw; }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
-.footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--orange); }
-.footer-copy { color: #334; }
-.footer-social { display: flex; gap: 0.6rem; }
+.footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--orange); letter-spacing: 1px; }
+.footer-sub { font-size: 11px; color: #283650; margin-top: 3px; letter-spacing: 0.5px; }
+.footer-copy { font-size: 11px; color: #1e2e48; letter-spacing: 0.5px; }
+.footer-social { display: flex; gap: 0.5rem; }
 
 /* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.65s ease, transform 0.65s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .hero-visual { display: none; }
   .hero-stats { flex-wrap: wrap; }
-  .stat { min-width: 140px; border-radius: 6px !important; }
-  .calc-wrapper { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: 1fr; }
+  .stat { min-width: 130px; }
+  .calc-wrapper { grid-template-columns: 1fr; gap: 3rem; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
   .faq-grid { grid-template-columns: 1fr; }
   nav .social-links { display: none; }
+  .steps-grid::before { display: none; }
+  .cta-banner { flex-direction: column; text-align: center; }
 }
 @media (max-width: 600px) {
-  .hero-title { font-size: 58px; }
-  .hero-stats { bottom: 1.5rem; }
+  .hero-title { font-size: 62px; }
+  .stat { padding: 1rem; }
   .stat-num { font-size: 28px; }
   .testimonials-grid { grid-template-columns: 1fr; }
+  .steps-grid { gap: 2rem; }
+  .step { padding: 0; }
 }
 </style>
 </head>
 <body>
 
+<div id="progress-bar"></div>
+
 <!-- NAV -->
-<nav>
+<nav id="navbar">
   <a href="#" class="nav-logo">
     <div class="nav-logo-icon">
       <svg viewBox="0 0 40 40"><path d="M20 4C13.4 4 8 9.4 8 16c0 9 12 20 12 20s12-11 12-20C32 9.4 26.6 4 20 4zm0 16a4 4 0 110-8 4 4 0 010 8z"/></svg>
@@ -273,12 +550,12 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
   </a>
   <ul class="nav-links">
     <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#calcular">Calcular</a></li>
+    <li><a href="#calcular">Calcular Rota</a></li>
     <li><a href="#como-funciona">Como Funciona</a></li>
     <li><a href="#contato" class="nav-cta">Falar Agora</a></li>
   </ul>
   <div class="social-links">
-    <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn insta" title="Instagram">
+    <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn" title="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
     </a>
     <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp">
@@ -292,126 +569,112 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
 
 <div class="nav-mobile-menu" id="mobileMenu">
   <a href="#servicos" onclick="toggleMenu()">Serviços</a>
-  <a href="#calcular" onclick="toggleMenu()">Calcular</a>
+  <a href="#calcular" onclick="toggleMenu()">Calcular Rota</a>
   <a href="#como-funciona" onclick="toggleMenu()">Como Funciona</a>
   <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" onclick="toggleMenu()">📸 Instagram</a>
-  <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" onclick="toggleMenu()">📢 Canal do WhatsApp</a>
+  <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" onclick="toggleMenu()">📢 Canal WhatsApp</a>
   <a href="#contato" onclick="toggleMenu()">Falar Agora →</a>
 </div>
 
 <!-- HERO -->
 <section class="hero" id="inicio">
-  <div class="hero-bg-pattern"></div>
-  <div class="hero-glow"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">Atendimento em toda a região</div>
-    <h1 class="hero-title">Levo você<br><span>onde precisa</span></h1>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Atendimento em toda a região
+    </div>
+    <h1 class="hero-title">
+      <em>Levo</em>
+      você<br><span>onde precisa</span>
+    </h1>
     <p class="hero-tagline">
       <strong>Translado entre cidades, entregas e serviços.</strong><br>
       Conforto, pontualidade e segurança onde você precisar.
     </p>
     <div class="hero-buttons">
       <a href="#calcular" class="btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Calcular distância
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Calcular Rota
       </a>
-      <a href="https://wa.me/5534998004215" target="_blank" class="btn-outline">
+      <a href="https://wa.me/5534998004215" target="_blank" class="btn-wa">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
+        Chamar no WhatsApp
       </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">+5</div><div class="stat-label">Anos de experiência</div></div>
+      <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Atendimento</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Comprometido</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Rotas atendidas</div></div>
     </div>
   </div>
   <div class="hero-visual">
-    <div class="big-logo-circle">
-      <div class="big-logo-inner">
+    <div class="orb-wrap">
+      <div class="orb-ring"><div class="orb-dot"></div></div>
+      <div class="orb-ring"></div>
+      <div class="orb-ring"></div>
+      <div class="orb-core">
         <svg viewBox="0 0 80 80"><path d="M40 8C26.7 8 16 18.7 16 32c0 18 24 40 24 40s24-22 24-40C64 18.7 53.3 8 40 8zm0 32a8 8 0 110-16 8 8 0 010 16z"/></svg>
       </div>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">+5</div>
-      <div class="stat-label">anos de experiência</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">24h</div>
-      <div class="stat-label">atendimento</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">2</div>
-      <div class="stat-label">contatos diretos</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">100%</div>
-      <div class="stat-label">comprometido</div>
+      <div class="orb-label">JB TRANSPORTES</div>
     </div>
   </div>
 </section>
 
 <!-- SERVIÇOS -->
-<section class="section section-dark" id="servicos">
-  <div class="reveal">
-    <div class="section-label">O que fazemos</div>
+<section class="services-section" id="servicos">
+  <div class="reveal" style="text-align:center; max-width:560px; margin:0 auto;">
+    <div class="section-label" style="justify-content:center;">O que fazemos</div>
     <h2 class="section-title">Nossos Serviços</h2>
-    <p class="section-subtitle">Soluções completas de transporte para você e sua empresa.</p>
+    <p class="section-subtitle" style="color:#6a80a0; margin:0 auto;">Soluções completas de transporte para você e sua empresa, com conforto e pontualidade.</p>
   </div>
   <div class="services-grid reveal">
     <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M21 8l-2-4H5L3 8H1v2h1l1 10h18l1-10h1V8h-2zm-8 9h-2v-5h2v5zm4 0h-2v-5h2v5zm-8 0H7v-5h2v5z"/></svg>
-      </div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 8l-2-4H5L3 8H1v2h1l1 10h18l1-10h1V8h-2zm-8 9h-2v-5h2v5zm4 0h-2v-5h2v5zm-8 0H7v-5h2v5z"/></svg></div>
       <div class="service-title">Translado entre cidades</div>
       <div class="service-desc">Viagens particulares de uma cidade a outra com conforto e segurança. Ideal para consultas médicas, compromissos de negócios e viagens pessoais.</div>
-      <span class="service-tag">Babacar / Transporte</span>
+      <span class="service-tag">Transporte / Babacar</span>
     </div>
     <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-      </div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
       <div class="service-title">Entrega de Encomendas</div>
-      <div class="service-desc">Busca e entrega de encomendas com agilidade. Documentos, mercadorias e volumes com cuidado e rastreamento do início ao fim.</div>
+      <div class="service-desc">Busca e entrega de encomendas com agilidade. Documentos, mercadorias e volumes com cuidado do início ao fim.</div>
       <span class="service-tag">Porta a porta</span>
     </div>
     <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-      </div>
+      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
       <div class="service-title">Serviços Especiais</div>
-      <div class="service-desc">Traslado para aeroportos, terminais de ônibus e estações. Atendimento a empresas com tarifa diferenciada e serviço recorrente.</div>
+      <div class="service-desc">Traslado para aeroportos, terminais e estações. Atendimento a empresas com tarifa diferenciada e serviço recorrente.</div>
       <span class="service-tag">Empresas & pessoal</span>
     </div>
   </div>
 </section>
+
+<!-- BANNER CTA -->
+<div class="cta-banner reveal">
+  <div class="cta-banner-text">
+    <span>Precisa de transporte agora?</span>
+    Fale direto com o Jander
+  </div>
+  <a class="btn-banner" href="https://wa.me/5534998004215" target="_blank">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#c96210"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Enviar mensagem agora →
+  </a>
+</div>
 
 <!-- CALCULADORA -->
 <section class="calc-section" id="calcular">
   <div class="calc-wrapper">
     <div class="calc-info reveal">
       <div class="section-label">Rápido e direto</div>
-      <h2 class="calc-info-title">Informe a rota<br><span>e fale com o Jander</span></h2>
-      <p class="calc-info-text">Digite o endereço de partida e o destino. Em seguida, é só clicar para enviar a rota direto no WhatsApp e já começar a negociação.</p>
+      <h2 class="section-title">Informe a rota<br><span>e fale com o Jander</span></h2>
+      <p class="calc-info-text">Digite o endereço de partida e o destino. Clique no botão e a mensagem já vai formatada pro WhatsApp do Jander.</p>
       <div class="info-items">
-        <div class="info-item">
-          <div class="info-item-icon">📍</div>
-          <div>
-            <div class="info-item-title">Endereço completo</div>
-            <div class="info-item-desc">Informe a rua de partida e de destino para facilitar o orçamento.</div>
-          </div>
-        </div>
-        <div class="info-item">
-          <div class="info-item-icon">💬</div>
-          <div>
-            <div class="info-item-title">Mensagem automática</div>
-            <div class="info-item-desc">A rota é enviada direto pro WhatsApp do Jander, já formatada e pronta.</div>
-          </div>
-        </div>
-        <div class="info-item">
-          <div class="info-item-icon">✅</div>
-          <div>
-            <div class="info-item-title">Combine o valor</div>
-            <div class="info-item-desc">O Jander responde com o preço e a disponibilidade para a sua rota.</div>
-          </div>
-        </div>
+        <div class="info-item"><div class="info-item-icon">📍</div><div><div class="info-item-title">Endereço completo</div><div class="info-item-desc">Informe a rua de partida e de destino para facilitar o orçamento.</div></div></div>
+        <div class="info-item"><div class="info-item-icon">💬</div><div><div class="info-item-title">Mensagem automática</div><div class="info-item-desc">A rota vai direto pro WhatsApp do Jander, formatada e pronta.</div></div></div>
+        <div class="info-item"><div class="info-item-icon">✅</div><div><div class="info-item-title">Combine o valor</div><div class="info-item-desc">O Jander responde com o preço e a disponibilidade para a sua rota.</div></div></div>
       </div>
     </div>
     <div class="reveal">
@@ -425,16 +688,13 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
           <label>Destino <span style="color:var(--orange)">*</span></label>
           <input type="text" id="dest" placeholder="Ex: Av. Paulista 1000, São Paulo, SP">
         </div>
-        <button class="btn-calc" id="calcBtn" onclick="calcular()">Enviar rota no WhatsApp</button>
+        <button class="btn-calc" onclick="calcular()">Enviar rota no WhatsApp</button>
         <div class="err-msg" id="errMsg"></div>
         <div class="calc-result" id="resultBox">
-          <div class="result-route">📍 <span id="routeLabel">—</span></div>
+          <div class="result-route">📍 <strong id="routeLabel">—</strong></div>
           <a class="result-cta" id="waLink" href="https://wa.me/5534998004215" target="_blank">
-            <div>
-              <div class="result-cta-label">Enviar rota e iniciar negociação</div>
-              <div class="result-cta-action">Chamar no WhatsApp →</div>
-            </div>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <div><div class="result-cta-label">Enviar rota e iniciar negociação</div><div class="result-cta-action">Chamar no WhatsApp →</div></div>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           </a>
         </div>
       </div>
@@ -444,43 +704,35 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
 
 <!-- COMO FUNCIONA -->
 <section class="steps-section" id="como-funciona">
-  <div class="reveal" style="text-align:center; max-width: 500px; margin: 0 auto 0;">
-    <div class="section-label">Simples assim</div>
-    <h2 class="section-title" style="color:var(--navy);">Como funciona</h2>
-    <p class="section-subtitle" style="margin: 0 auto;">Da sua solicitação até o destino, em 4 passos fáceis.</p>
+  <div class="reveal" style="text-align:center; max-width:520px; margin:0 auto;">
+    <div class="section-label" style="justify-content:center;">Simples assim</div>
+    <h2 class="section-title">Como funciona</h2>
+    <p class="section-subtitle" style="margin:0 auto; color:#778;">Da sua solicitação até o destino, em 4 passos fáceis.</p>
   </div>
   <div class="steps-grid reveal">
     <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-content">
-        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
-        <div class="step-title">Entre em contato</div>
-        <div class="step-desc">Mande uma mensagem no WhatsApp ou calcule a distância aqui no site antes de falar.</div>
-      </div>
+      <div class="step-num-wrap"><div class="step-num">01</div></div>
+      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
+      <div class="step-title">Entre em contato</div>
+      <div class="step-desc">Mande mensagem no WhatsApp ou calcule a rota aqui no site.</div>
     </div>
     <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-content">
-        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
-        <div class="step-title">Agende a viagem</div>
-        <div class="step-desc">Combine o horário, local de embarque e confirmamos tudo pelo WhatsApp.</div>
-      </div>
+      <div class="step-num-wrap"><div class="step-num">02</div></div>
+      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
+      <div class="step-title">Agende a viagem</div>
+      <div class="step-desc">Combine horário e local de embarque diretamente pelo WhatsApp.</div>
     </div>
     <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-content">
-        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
-        <div class="step-title">Embarque tranquilo</div>
-        <div class="step-desc">O Jander busca você no endereço combinado, pontualmente e com segurança.</div>
-      </div>
+      <div class="step-num-wrap"><div class="step-num">03</div></div>
+      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
+      <div class="step-title">Embarque tranquilo</div>
+      <div class="step-desc">O Jander busca você no endereço combinado, com pontualidade.</div>
     </div>
     <div class="step">
-      <div class="step-num">04</div>
-      <div class="step-content">
-        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
-        <div class="step-title">Chegue no destino</div>
-        <div class="step-desc">Viagem confortável, direta e segura. Pague o valor combinado na chegada.</div>
-      </div>
+      <div class="step-num-wrap"><div class="step-num">04</div></div>
+      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+      <div class="step-title">Chegue no destino</div>
+      <div class="step-desc">Viagem confortável e segura. Pague o valor combinado na chegada.</div>
     </div>
   </div>
 </section>
@@ -488,42 +740,24 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
 <!-- DEPOIMENTOS -->
 <section class="testimonials-section" id="depoimentos">
   <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
-    <div class="section-label">Quem já viajou</div>
-    <h2 class="section-title" style="color:white;">O que dizem<br><span style="color:var(--orange)">os clientes</span></h2>
+    <div class="section-label" style="justify-content:center;">Quem já viajou</div>
+    <h2 class="section-title">O que dizem<br><span>os clientes</span></h2>
   </div>
   <div class="testimonials-grid reveal">
     <div class="testimonial-card">
       <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"Precisei ir a uma consulta em Uberaba e o Jander foi super pontual. Confortável, seguro e sem estresse. Recomendo muito!"</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">MA</div>
-        <div>
-          <div class="testimonial-name">Maria Aparecida</div>
-          <div class="testimonial-city">Uberlândia, MG</div>
-        </div>
-      </div>
+      <div class="testimonial-author"><div class="testimonial-avatar">MA</div><div><div class="testimonial-name">Maria Aparecida</div><div class="testimonial-city">Uberlândia, MG</div></div></div>
     </div>
     <div class="testimonial-card">
       <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"Uso o serviço pra enviar encomendas para São Paulo toda semana. Sempre chega no prazo e o Jander avisa quando entregou. Confiança total."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">RS</div>
-        <div>
-          <div class="testimonial-name">Roberto Silva</div>
-          <div class="testimonial-city">Uberaba, MG</div>
-        </div>
-      </div>
+      <div class="testimonial-author"><div class="testimonial-avatar">RS</div><div><div class="testimonial-name">Roberto Silva</div><div class="testimonial-city">Uberaba, MG</div></div></div>
     </div>
     <div class="testimonial-card">
       <div class="testimonial-stars">★★★★★</div>
       <p class="testimonial-text">"Fui de Uberlândia até Brasília e a viagem foi ótima. Carro limpo, ar-condicionado gelado e paradas quando precisei. Melhor que pegar ônibus!"</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">CF</div>
-        <div>
-          <div class="testimonial-name">Carla Ferreira</div>
-          <div class="testimonial-city">Uberlândia, MG</div>
-        </div>
-      </div>
+      <div class="testimonial-author"><div class="testimonial-avatar">CF</div><div><div class="testimonial-name">Carla Ferreira</div><div class="testimonial-city">Uberlândia, MG</div></div></div>
     </div>
   </div>
 </section>
@@ -531,65 +765,32 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
 <!-- FAQ -->
 <section class="faq-section" id="faq">
   <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
-    <div class="section-label">Tire suas dúvidas</div>
-    <h2 class="section-title" style="color:var(--navy);">Perguntas<br><span style="color:var(--orange)">frequentes</span></h2>
+    <div class="section-label" style="justify-content:center;">Tire suas dúvidas</div>
+    <h2 class="section-title">Perguntas<br><span style="color:var(--orange)">frequentes</span></h2>
   </div>
   <div class="faq-grid reveal">
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        Como funciona o pagamento? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">O pagamento é combinado diretamente com o Jander pelo WhatsApp antes da viagem. Aceitamos dinheiro e Pix.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        Atende em quais horários? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">O atendimento é feito 24 horas por dia, 7 dias por semana. Entre em contato pelo WhatsApp para verificar disponibilidade.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        Posso enviar encomendas sem viajar junto? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">Sim! O serviço de entrega de encomendas é feito de forma independente. Você entrega o item e o Jander leva até o destinatário.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        Qual o prazo para agendar? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">Para garantir o horário desejado, o ideal é agendar com pelo menos algumas horas de antecedência. Urgências são avaliadas conforme disponibilidade.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        O serviço atende fora do Triângulo Mineiro? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">Sim! Atendemos rotas para São Paulo, Brasília, Goiânia e outras cidades. Consulte pelo WhatsApp para destinos específicos.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">
-        Quantas pessoas cabem no veículo? <span class="faq-arrow">▾</span>
-      </button>
-      <div class="faq-answer">O veículo comporta até 4 passageiros confortavelmente, além de bagagem. Para grupos maiores, consulte disponibilidade.</div>
-    </div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Como funciona o pagamento? <span class="faq-arrow">▾</span></button><div class="faq-answer">O pagamento é combinado diretamente com o Jander pelo WhatsApp antes da viagem. Aceitamos dinheiro e Pix.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Atende em quais horários? <span class="faq-arrow">▾</span></button><div class="faq-answer">O atendimento é feito 24 horas por dia, 7 dias por semana. Entre em contato pelo WhatsApp para verificar disponibilidade.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Posso enviar encomendas sem viajar junto? <span class="faq-arrow">▾</span></button><div class="faq-answer">Sim! O serviço de entrega de encomendas é feito de forma independente. Você entrega o item e o Jander leva até o destinatário.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Qual o prazo para agendar? <span class="faq-arrow">▾</span></button><div class="faq-answer">Para garantir o horário desejado, o ideal é agendar com pelo menos algumas horas de antecedência. Urgências são avaliadas conforme disponibilidade.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">O serviço atende fora do Triângulo Mineiro? <span class="faq-arrow">▾</span></button><div class="faq-answer">Sim! Atendemos rotas para São Paulo, Brasília, Goiânia e outras cidades. Consulte pelo WhatsApp para destinos específicos.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Quantas pessoas cabem no veículo? <span class="faq-arrow">▾</span></button><div class="faq-answer">O veículo comporta até 4 passageiros confortavelmente, além de bagagem. Para grupos maiores, consulte disponibilidade.</div></div>
   </div>
 </section>
 
 <!-- CONTATO -->
 <section class="contact-section" id="contato">
   <div class="contact-grid">
-    <div class="contact-info-side reveal">
+    <div class="reveal">
       <div class="section-label">Fale com a gente</div>
-      <h2 class="contact-info-title">Pronto pra<br><span>embarcar?</span></h2>
+      <h2 class="section-title">Pronto pra<br><span>embarcar?</span></h2>
       <p class="contact-info-text">Entre em contato com o Jander Borges diretamente pelo WhatsApp. Atendimento rápido, sem enrolação.</p>
-      <div style="margin-bottom: 1.5rem;">
-        <div class="section-label" style="margin-bottom: 0.75rem;">Regiões atendidas</div>
+      <div>
+        <div class="section-label" style="margin-bottom:0.75rem;">Regiões atendidas</div>
         <div class="area-tags">
-          <span class="area-tag">Uberlândia</span>
-          <span class="area-tag">Uberaba</span>
-          <span class="area-tag">Triângulo Mineiro</span>
-          <span class="area-tag">São Paulo</span>
-          <span class="area-tag">Brasília</span>
-          <span class="area-tag">Goiânia</span>
+          <span class="area-tag">Uberlândia</span><span class="area-tag">Uberaba</span>
+          <span class="area-tag">Triângulo Mineiro</span><span class="area-tag">São Paulo</span>
+          <span class="area-tag">Brasília</span><span class="area-tag">Goiânia</span>
           <span class="area-tag">E mais...</span>
         </div>
       </div>
@@ -598,45 +799,31 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
       <div class="contact-card">
         <div class="contact-person">
           <div class="contact-avatar">JB</div>
-          <div>
-            <div class="contact-name">Jander Borges</div>
-            <div class="contact-role">Motorista & Responsável</div>
-          </div>
+          <div><div class="contact-name">Jander Borges</div><div class="contact-role">Motorista & Responsável</div></div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon email">
+          <div class="contact-item-icon" style="background:rgba(232,119,34,0.12);">
             <svg viewBox="0 0 24 24" fill="#e87722" width="18" height="18"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           </div>
-          <div>
-            <div class="contact-item-label">E-mail</div>
-            <div class="contact-item-value"><a href="/cdn-cgi/l/email-protection#ee848c9a9c8f809d9e819c9a8b9d8b808d81838b808a8f9dae89838f8782c08d8183"><span class="__cf_email__" data-cfemail="244e465056454a57544b56504157414a474b49414a404557644349454d480a474b49">[email&#160;protected]</span></a></div>
-          </div>
+          <div><div class="contact-item-label">E-mail</div><div class="contact-item-value"><a href="mailto:jbtransportesencomendas@gmail.com">jbtransportesencomendas@gmail.com</a></div></div>
         </div>
         <div class="contact-item">
           <div class="contact-item-icon" style="background:rgba(225,48,108,0.12);">
             <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
           </div>
-          <div>
-            <div class="contact-item-label">Instagram</div>
-            <div class="contact-item-value"><a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank">@jbtransporteseencomendas</a></div>
-          </div>
+          <div><div class="contact-item-label">Instagram</div><div class="contact-item-value"><a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank">@jbtransporteseencomendas</a></div></div>
         </div>
         <div class="contact-item">
           <div class="contact-item-icon" style="background:rgba(37,211,102,0.12);">
             <svg viewBox="0 0 24 24" fill="#25d366" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           </div>
-          <div>
-            <div class="contact-item-label">Canal WhatsApp</div>
-            <div class="contact-item-value"><a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank">Entrar no canal →</a></div>
-          </div>
+          <div><div class="contact-item-label">Canal WhatsApp</div><div class="contact-item-value"><a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank">Entrar no canal →</a></div></div>
         </div>
-        <div class="wa-buttons">
-          <a class="wa-btn-full" href="https://wa.me/5534998004215" target="_blank">
-            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            <span>WhatsApp</span>
-            <div class="wa-num">(34) 99800-4215</div>
-          </a>
-        </div>
+        <a class="wa-btn-full" href="https://wa.me/5534998004215" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span>WhatsApp</span>
+          <span class="wa-num">(34) 99800-4215</span>
+        </a>
       </div>
     </div>
   </div>
@@ -655,16 +842,16 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
   <div class="footer-inner">
     <div>
       <div class="footer-brand">JB Transportes</div>
-      <div style="font-size:11px; color:#334; margin-top:4px;">Encomendas & Serviços · Jander Borges</div>
+      <div class="footer-sub">Encomendas & Serviços · Jander Borges</div>
     </div>
     <div class="footer-social">
-      <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn insta" title="Instagram" style="border-color:rgba(225,48,108,0.3);">
+      <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn" title="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
       </a>
-      <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp" style="border-color:rgba(37,211,102,0.3);">
+      <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp">
         <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       </a>
-      <a href="https://wa.me/5534998004215" target="_blank" class="social-btn" title="WhatsApp" style="border-color:rgba(37,211,102,0.3);">
+      <a href="https://wa.me/5534998004215" target="_blank" class="social-btn" title="WhatsApp">
         <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       </a>
     </div>
@@ -672,7 +859,15 @@ footer { background: #0d1829; color: #445; padding: 2.5rem 5vw; font-size: 12px;
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+/* BARRA DE PROGRESSO */
+window.addEventListener('scroll', function() {
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  document.getElementById('progress-bar').style.width = (scrollTop / scrollHeight * 100) + '%';
+  document.getElementById('navbar').classList.toggle('scrolled', scrollTop > 30);
+});
+
 /* FAQ */
 function toggleFaq(btn) {
   var item = btn.closest('.faq-item');
@@ -709,13 +904,11 @@ function calcular() {
   }
 
   document.getElementById('routeLabel').textContent = origin + ' → ' + dest;
-
   var msg = 'Olá Jander! Gostaria de solicitar um serviço:\n\n'
           + '📍 *Partida:* ' + origin + '\n'
           + '🏁 *Destino:* ' + dest + '\n\n'
           + 'Poderia me passar o valor e a disponibilidade?';
   document.getElementById('waLink').href = 'https://wa.me/5534998004215?text=' + encodeURIComponent(msg);
-
   result.classList.add('show');
 }
 
@@ -727,7 +920,7 @@ var observer = new IntersectionObserver(function(entries) {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.1 });
 
 document.querySelectorAll('.reveal').forEach(function(el) {
   observer.observe(el);
