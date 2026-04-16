@@ -1,930 +1,1188 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JB Transportes – Encomendas & Serviços</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Poké Alliance • Filipi • Server Moon</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #0f1c36;
-  --navy-mid: #14213d;
-  --navy-light: #1a2d52;
-  --orange: #e87722;
-  --orange-dark: #c96210;
-  --orange-glow: rgba(232,119,34,0.18);
-  --cream: #f8f5f0;
-  --wa: #25d366;
-}
+  :root {
+    --bg: #060d1a;
+    --bg2: #0b1728;
+    --card: #0e1e35;
+    --border: #1a3155;
+    --gold: #c9a227;
+    --gold2: #e8c547;
+    --red: #e03535;
+    --yellow: #f0c040;
+    --green: #25d366;
+    --blue: #4a90d9;
+    --text: #d4e4f7;
+    --muted: #6b8cad;
+    --white: #ffffff;
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: 'Barlow', sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
+    --bug: #92bc2c;
+    --dark: #595761;
+    --dragon: #0c69c8;
+    --electric: #f2d94e;
+    --fairy: #ee90e6;
+    --fighting: #d3425f;
+    --fire: #fba54c;
+    --flying: #89aae3;
+    --ghost: #5f6dbc;
+    --grass: #5fbd58;
+    --ground: #da7c4d;
+    --ice: #75d0c1;
+    --normal: #a0a29f;
+    --poison: #b763cf;
+    --psychic: #fa8581;
+    --rock: #c9bb8a;
+    --steel: #5695a3;
+    --water: #539ddf;
+  }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 10px; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* BARRA DE PROGRESSO */
-#progress-bar {
-  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-  background: linear-gradient(90deg, var(--orange), #ffb347);
-  z-index: 9999; transition: width 0.1s linear;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5vw; height: 68px;
-  background: rgba(15,28,54,0.96);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(232,119,34,0.15);
-  transition: box-shadow 0.3s;
-}
-nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.35); }
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-icon {
-  width: 36px; height: 36px; background: var(--orange); border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 16px rgba(232,119,34,0.4);
-}
-.nav-logo-icon svg { width: 20px; height: 20px; fill: white; }
-.nav-logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 21px; color: white; letter-spacing: 1.5px; }
-.nav-logo-sub { font-size: 9px; color: #5f7499; letter-spacing: 2px; text-transform: uppercase; }
-.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-.nav-links a {
-  color: #8aa0bf; font-size: 12px; font-weight: 500; text-decoration: none;
-  letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s;
-  position: relative; padding-bottom: 2px;
-}
-.nav-links a::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: var(--orange); transform: scaleX(0); transition: transform 0.25s;
-}
-.nav-links a:hover { color: white; }
-.nav-links a:hover::after { transform: scaleX(1); }
-.nav-cta {
-  background: var(--orange) !important; color: white !important;
-  padding: 9px 20px; border-radius: 6px; font-weight: 600 !important;
-  box-shadow: 0 0 20px rgba(232,119,34,0.3);
-}
-.nav-cta:hover { background: var(--orange-dark) !important; box-shadow: 0 0 28px rgba(232,119,34,0.5) !important; }
-.nav-cta::after { display: none !important; }
+  /* STARS */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) infinite ease-in-out;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: var(--o, 0.6); transform: scale(1.2); }
+  }
 
-.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
-.nav-hamburger span { display: block; width: 24px; height: 2px; background: #aabbd4; border-radius: 2px; }
-.nav-mobile-menu {
-  display: none; position: fixed; top: 68px; left: 0; right: 0;
-  background: rgba(10,18,36,0.99); padding: 1.5rem 5vw;
-  flex-direction: column; border-bottom: 1px solid rgba(232,119,34,0.15); z-index: 99;
-  backdrop-filter: blur(20px);
-}
-.nav-mobile-menu.open { display: flex; }
-.nav-mobile-menu a {
-  color: #8aa0bf; font-size: 14px; font-weight: 500; text-decoration: none;
-  letter-spacing: 1.5px; text-transform: uppercase; padding: 1rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05); transition: color 0.2s;
-}
-.nav-mobile-menu a:hover { color: var(--orange); }
-.nav-mobile-menu a:last-child { border-bottom: none; color: var(--orange); margin-top: 0.5rem; }
+  /* FLOATING BUTTONS */
+  .float-bar {
+    position: fixed;
+    right: 18px;
+    bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999;
+  }
+  .float-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    position: relative;
+  }
+  .float-btn:hover { transform: scale(1.13); box-shadow: 0 6px 28px rgba(0,0,0,0.7); }
+  .float-btn.whats { background: #25d366; }
+  .float-btn.top { background: var(--card); border: 1px solid var(--border); color: var(--gold); font-size: 20px; }
+  .float-btn .tooltip {
+    position: absolute;
+    right: 68px;
+    background: rgba(10,20,40,0.95);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .float-btn:hover .tooltip { opacity: 1; }
 
-/* HERO */
-.hero {
-  min-height: 100vh; background: var(--navy); position: relative;
-  display: flex; align-items: center; overflow: hidden; padding: 0 5vw;
-  padding-top: 68px;
-}
-.hero-bg {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 60% at 75% 50%, rgba(232,119,34,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 80% at 0% 100%, rgba(20,40,80,0.6) 0%, transparent 60%);
-}
-.hero-grid {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px),
-    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px);
-}
-.hero-content { position: relative; z-index: 2; max-width: 620px; padding: 4rem 0; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(232,119,34,0.08); border: 1px solid rgba(232,119,34,0.25);
-  color: var(--orange); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
-  padding: 7px 16px; border-radius: 30px; margin-bottom: 2rem;
-  animation: fadeUp 0.7s ease both;
-}
-.hero-badge-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.7); } }
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(72px, 10vw, 128px);
-  color: white; line-height: 0.88; margin-bottom: 1.75rem;
-  animation: fadeUp 0.7s 0.1s ease both; letter-spacing: 1px;
-}
-.hero-title span { color: var(--orange); display: block; }
-.hero-title em {
-  font-style: normal; color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-}
-.hero-tagline {
-  font-size: 17px; font-weight: 300; color: #7a90b0; line-height: 1.7;
-  margin-bottom: 2.75rem; animation: fadeUp 0.7s 0.2s ease both; max-width: 460px;
-}
-.hero-tagline strong { color: #c8d8ec; font-weight: 500; }
-.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--orange); color: white; padding: 15px 30px; border-radius: 8px;
-  font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none;
-  border: none; cursor: pointer;
-  box-shadow: 0 4px 24px rgba(232,119,34,0.35);
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-}
-.btn-primary:hover { background: var(--orange-dark); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(232,119,34,0.5); }
-.btn-wa {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--wa); color: white; padding: 15px 30px; border-radius: 8px;
-  font-size: 14px; font-weight: 600; text-decoration: none;
-  box-shadow: 0 4px 24px rgba(37,211,102,0.25);
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-}
-.btn-wa:hover { background: #1db954; transform: translateY(-3px); box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 20px 30px;
+  }
+  .logo-hex {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 18px;
+    position: relative;
+  }
+  .logo-hex svg { width: 100%; height: 100%; filter: drop-shadow(0 0 16px rgba(201,162,39,0.5)); }
+  .brand-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--gold), var(--gold2), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+    animation: glow-text 3s ease-in-out infinite;
+  }
+  @keyframes glow-text {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(201,162,39,0.4)); }
+    50% { filter: drop-shadow(0 0 18px rgba(232,197,71,0.7)); }
+  }
+  .brand-sub {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(10px, 2.5vw, 14px);
+    letter-spacing: 0.4em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .header-divider {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 18px;
+  }
+  .filipi-tag {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    padding: 6px 22px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    background: rgba(201,162,39,0.08);
+  }
+  .server-tag {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+  }
 
-/* Visual decorativo hero */
-.hero-visual {
-  position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
-  z-index: 1; animation: fadeUp 0.9s 0.4s ease both;
-}
-.orb-wrap { position: relative; width: 360px; height: 360px; }
-.orb-ring {
-  position: absolute; border-radius: 50%; border: 1px solid rgba(232,119,34,0.15);
-  animation: spin 18s linear infinite;
-}
-.orb-ring:nth-child(1) { inset: 0; animation-duration: 18s; }
-.orb-ring:nth-child(2) { inset: 24px; border-style: dashed; border-color: rgba(232,119,34,0.08); animation-direction: reverse; animation-duration: 28s; }
-.orb-ring:nth-child(3) { inset: -20px; border-color: rgba(255,255,255,0.04); animation-duration: 40s; }
-@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
-.orb-dot {
-  position: absolute; width: 10px; height: 10px; border-radius: 50%;
-  background: var(--orange); box-shadow: 0 0 12px var(--orange);
-  top: 8px; left: 50%; margin-left: -5px;
-}
-.orb-core {
-  position: absolute; inset: 50px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #1e3260, #0c1628);
-  border: 1px solid rgba(232,119,34,0.2);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 60px rgba(232,119,34,0.1), inset 0 0 40px rgba(0,0,0,0.3);
-}
-.orb-core svg { width: 100px; height: 100px; fill: var(--orange); opacity: 0.9; }
-.orb-label {
-  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-  font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 3px;
-  color: rgba(232,119,34,0.4); white-space: nowrap;
-}
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 16px 120px;
+  }
 
-/* Stats hero */
-.hero-stats {
-  display: flex; gap: 0; margin-top: 3rem;
-  animation: fadeUp 0.7s 0.5s ease both;
-  border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden;
-}
-.stat {
-  flex: 1; padding: 1.25rem 1.5rem;
-  background: rgba(255,255,255,0.03);
-  border-right: 1px solid rgba(255,255,255,0.06);
-  transition: background 0.2s;
-}
-.stat:last-child { border-right: none; }
-.stat:hover { background: rgba(232,119,34,0.05); }
-.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--orange); line-height: 1; }
-.stat-label { font-size: 10px; color: #445; letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-align: center;
+    margin: 40px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-title::before, .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border));
+  }
+  .section-title::after { background: linear-gradient(90deg, var(--border), transparent); }
 
-@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  /* SERVICE CARDS HP/SPEED */
+  .hpspeed-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .service-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 12px;
+    pointer-events: none;
+  }
+  .service-card.hp::before { background: radial-gradient(circle at 20% 50%, rgba(224,53,53,0.12), transparent 60%); }
+  .service-card.speed::before { background: radial-gradient(circle at 20% 50%, rgba(240,192,64,0.12), transparent 60%); }
+  .service-card:hover::before, .service-card.selected::before { opacity: 1; }
+  .service-card.hp { border-color: rgba(224,53,53,0.4); }
+  .service-card.speed { border-color: rgba(240,192,64,0.4); }
+  .service-card.hp:hover, .service-card.hp.selected { border-color: var(--red); box-shadow: 0 0 20px rgba(224,53,53,0.3); transform: translateY(-2px); }
+  .service-card.speed:hover, .service-card.speed.selected { border-color: var(--yellow); box-shadow: 0 0 20px rgba(240,192,64,0.3); transform: translateY(-2px); }
+  .card-check {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .service-card.hp.selected .card-check { background: var(--red); border-color: var(--red); }
+  .service-card.speed.selected .card-check { background: var(--yellow); border-color: var(--yellow); }
+  .service-card.selected .card-check::after { content: '✓'; color: white; font-weight: bold; }
+  .card-icon { font-size: 28px; margin-bottom: 8px; }
+  .card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--white);
+  }
+  .card-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .card-price {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .service-card.hp .card-price { color: var(--red); }
+  .service-card.speed .card-price { color: var(--yellow); }
 
-/* SECTION LABEL */
-.section-label {
-  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--orange); font-weight: 600; margin-bottom: 0.6rem;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-label::before { content:''; width:20px; height:1px; background:var(--orange); }
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(40px, 5.5vw, 64px);
-  line-height: 1; margin-bottom: 1rem;
-}
-.section-subtitle { font-size: 16px; font-weight: 300; line-height: 1.75; max-width: 520px; }
+  /* COUNTER WIDGET */
+  .counter-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .counter-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .counter-btn:hover { background: rgba(255,255,255,0.12); transform: scale(1.15); }
+  .counter-btn:active { transform: scale(0.92); }
+  .service-card.hp .counter-btn { border-color: rgba(224,53,53,0.5); color: var(--red); }
+  .service-card.speed .counter-btn { border-color: rgba(240,192,64,0.5); color: var(--yellow); }
+  .counter-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    min-width: 26px;
+    text-align: center;
+    color: var(--white);
+  }
+  .service-card.hp.selected .counter-val { color: var(--red); }
+  .service-card.speed.selected .counter-val { color: var(--yellow); }
 
-/* SERVIÇOS */
-.services-section { padding: 7rem 5vw; background: var(--navy-mid); }
-.services-section .section-title { color: white; }
-.services-section .section-subtitle { color: #6a80a0; }
-.services-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 1.5rem; margin-top: 4rem;
-}
-.service-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px; padding: 2.5rem 2rem;
-  position: relative; overflow: hidden;
-  transition: transform 0.3s, border-color 0.3s, background 0.3s;
-}
-.service-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--orange), #ffb347);
-  transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
-}
-.service-card:hover { transform: translateY(-6px); border-color: rgba(232,119,34,0.2); background: rgba(232,119,34,0.04); }
-.service-card:hover::before { transform: scaleX(1); }
-.service-icon {
-  width: 54px; height: 54px;
-  background: rgba(232,119,34,0.1); border: 1px solid rgba(232,119,34,0.2);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  margin-bottom: 1.5rem; transition: background 0.3s, box-shadow 0.3s;
-}
-.service-card:hover .service-icon { background: rgba(232,119,34,0.18); box-shadow: 0 0 20px rgba(232,119,34,0.2); }
-.service-icon svg { width: 26px; height: 26px; fill: var(--orange); }
-.service-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: white; letter-spacing: 1px; margin-bottom: 0.75rem; }
-.service-desc { font-size: 14px; color: #6a80a0; line-height: 1.75; font-weight: 300; }
-.service-tag {
-  display: inline-block; margin-top: 1.5rem;
-  background: rgba(232,119,34,0.08); color: var(--orange);
-  font-size: 11px; letter-spacing: 1.5px; padding: 5px 14px;
-  border-radius: 30px; text-transform: uppercase; border: 1px solid rgba(232,119,34,0.15);
-}
+  /* ELEMENTAL COUNTER */
+  .el-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  .el-counter-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .el-counter-btn:hover { background: rgba(255,255,255,0.12); transform: scale(1.15); }
+  .el-counter-btn:active { transform: scale(0.9); }
+  .elemental-card.selected .el-counter-btn { color: var(--white); }
+  .el-counter-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 16px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .elemental-card.selected .el-counter-val { color: var(--white); }
 
-/* BANNER CTA */
-.cta-banner {
-  background: var(--orange); padding: 3rem 5vw;
-  display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
-}
-.cta-banner-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 44px); color: white; line-height: 1.1; }
-.cta-banner-text span { opacity: 0.75; font-size: 0.6em; display: block; letter-spacing: 2px; text-transform: uppercase; font-family: 'Barlow', sans-serif; font-weight: 400; margin-bottom: 4px; }
-.btn-banner {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: white; color: var(--orange-dark); padding: 14px 28px; border-radius: 8px;
-  font-size: 15px; font-weight: 700; text-decoration: none; white-space: nowrap;
-  transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-.btn-banner:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+  /* COMBO BANNER */
+  .combo-banner {
+    background: linear-gradient(135deg, rgba(37,211,102,0.08), rgba(37,211,102,0.03));
+    border: 1px solid rgba(37,211,102,0.3);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .combo-banner strong {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+  }
 
-/* CALCULADORA */
-.calc-section { background: var(--navy); padding: 7rem 5vw; position: relative; overflow: hidden; }
-.calc-section::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background-image: repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(232,119,34,0.02) 30px, rgba(232,119,34,0.02) 31px);
-}
-.calc-wrapper { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-.calc-info .section-title { color: white; }
-.calc-info .section-title span { color: var(--orange); }
-.calc-info-text { font-size: 15px; color: #6a80a0; line-height: 1.85; font-weight: 300; margin: 1.25rem 0 2rem; }
-.info-items { display: flex; flex-direction: column; gap: 1rem; }
-.info-item {
-  display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.25rem;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-  border-left: 3px solid var(--orange); border-radius: 0 10px 10px 0; transition: background 0.2s;
-}
-.info-item:hover { background: rgba(232,119,34,0.04); }
-.info-item-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
-.info-item-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 2px; }
-.info-item-desc { font-size: 13px; color: #5a7090; line-height: 1.5; }
-.calc-form {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12);
-  border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.calc-field { margin-bottom: 1.25rem; }
-.calc-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #5a7090; margin-bottom: 8px; }
-.calc-field input {
-  width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: white;
-  font-family: 'Barlow', sans-serif; font-size: 15px; transition: border-color 0.2s, background 0.2s; outline: none;
-}
-.calc-field input::placeholder { color: #334; }
-.calc-field input:focus { border-color: var(--orange); background: rgba(232,119,34,0.04); }
-.calc-field input.invalid { border-color: #e55; }
-.calc-divider { display: flex; align-items: center; gap: 1rem; margin: 0.25rem 0; color: rgba(232,119,34,0.5); font-size: 18px; }
-.calc-divider::before, .calc-divider::after { content: ''; flex: 1; height: 1px; background: rgba(232,119,34,0.1); }
-.btn-calc {
-  width: 100%; padding: 16px; background: var(--orange); color: white; border: none; cursor: pointer;
-  border-radius: 8px; font-family: 'Barlow', sans-serif; font-size: 15px; font-weight: 600;
-  letter-spacing: 1px; text-transform: uppercase; margin-top: 0.5rem;
-  box-shadow: 0 4px 20px rgba(232,119,34,0.3); transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-}
-.btn-calc:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,119,34,0.45); }
-.err-msg {
-  color: #e55; font-size: 13px; margin-top: 0.75rem; display: none;
-  padding: 10px 14px; background: rgba(229,85,85,0.08); border-radius: 8px;
-  border-left: 3px solid #e55; line-height: 1.5;
-}
-.calc-result {
-  margin-top: 1.5rem; border-radius: 10px; padding: 1.5rem; display: none;
-  background: linear-gradient(135deg, rgba(232,119,34,0.08), rgba(15,28,54,0.6));
-  border: 1px solid rgba(232,119,34,0.25);
-}
-.calc-result.show { display: block; animation: fadeUp 0.4s ease; }
-.result-route { font-size: 12px; color: #6a80a0; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
-.result-route strong { color: var(--orange); }
-.result-cta {
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  background: var(--wa); border-radius: 8px; padding: 1.25rem 1.5rem;
-  text-decoration: none; transition: background 0.2s, transform 0.15s;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.25);
-}
-.result-cta:hover { background: #1db954; transform: translateY(-2px); }
-.result-cta-label { font-size: 13px; color: rgba(255,255,255,0.85); }
-.result-cta-action { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: white; letter-spacing: 1px; }
+  /* ELEMENTALS GRID */
+  .elementals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 560px) {
+    .elementals-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (min-width: 720px) {
+    .elementals-grid { grid-template-columns: repeat(6, 1fr); }
+  }
 
-/* COMO FUNCIONA */
-.steps-section { padding: 7rem 5vw; background: var(--cream); }
-.steps-section .section-title { color: var(--navy); }
-.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; margin-top: 4rem; position: relative; }
-.steps-grid::before {
-  content: ''; position: absolute; top: 36px; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232,119,34,0.3), transparent); pointer-events: none;
-}
-.step { padding: 0 1.5rem; text-align: center; position: relative; }
-.step-num-wrap {
-  width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 1.5rem;
-  background: white; border: 2px solid rgba(232,119,34,0.2);
-  display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.step:hover .step-num-wrap { border-color: var(--orange); box-shadow: 0 0 28px rgba(232,119,34,0.2); transform: translateY(-4px); }
-.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--orange); line-height: 1; }
-.step-icon-wrap { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-.step-icon-wrap svg { width: 18px; height: 18px; fill: var(--orange); }
-.step-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--navy); margin-bottom: 0.5rem; letter-spacing: 0.5px; }
-.step-desc { font-size: 13px; color: #778; line-height: 1.7; font-weight: 300; }
+  .elemental-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    user-select: none;
+    position: relative;
+  }
+  .elemental-card:hover { transform: translateY(-2px); }
+  .elemental-card.selected { transform: translateY(-3px); }
+  .elemental-card .el-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .elemental-card.selected .el-check { color: white; font-weight: bold; }
+  .elemental-card.selected .el-check::after { content: '✓'; }
+  .el-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .el-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+  .el-price {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
 
-/* DEPOIMENTOS */
-.testimonials-section { background: var(--navy-mid); padding: 7rem 5vw; }
-.testimonials-section .section-title { color: white; }
-.testimonials-section .section-title span { color: var(--orange); }
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3.5rem; }
-.testimonial-card {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px; padding: 2rem;
-  transition: transform 0.3s, border-color 0.3s; position: relative; overflow: hidden;
-}
-.testimonial-card::before {
-  content: '"'; position: absolute; top: -10px; right: 20px; font-size: 120px;
-  color: rgba(232,119,34,0.06); font-family: Georgia, serif; line-height: 1; pointer-events: none;
-}
-.testimonial-card:hover { transform: translateY(-4px); border-color: rgba(232,119,34,0.15); }
-.testimonial-stars { color: var(--orange); font-size: 13px; margin-bottom: 1rem; letter-spacing: 3px; }
-.testimonial-text { font-size: 14px; color: #7a90b0; line-height: 1.8; font-weight: 300; margin-bottom: 1.5rem; font-style: italic; }
-.testimonial-author { display: flex; align-items: center; gap: 10px; }
-.testimonial-avatar {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: rgba(232,119,34,0.12); border: 1px solid rgba(232,119,34,0.25);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--orange); flex-shrink: 0;
-}
-.testimonial-name { font-size: 14px; color: white; font-weight: 500; }
-.testimonial-city { font-size: 12px; color: #445; }
+  /* Type colors */
+  .type-bug .el-dot { background: rgba(146,188,44,0.2); }
+  .type-bug.selected { border-color: var(--bug); box-shadow: 0 0 14px rgba(146,188,44,0.35); }
+  .type-bug .el-check { background: var(--bug); border-color: var(--bug); }
 
-/* FAQ */
-.faq-section { background: var(--cream); padding: 7rem 5vw; }
-.faq-section .section-title { color: var(--navy); }
-.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
-.faq-item {
-  background: white; border: 1px solid rgba(20,33,61,0.07); border-radius: 12px; overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: box-shadow 0.2s;
-}
-.faq-item:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-.faq-question {
-  width: 100%; background: none; border: none; text-align: left; padding: 1.25rem 1.5rem;
-  font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 600; color: var(--navy);
-  cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: color 0.2s;
-}
-.faq-question:hover { color: var(--orange); }
-.faq-arrow { font-size: 16px; color: var(--orange); transition: transform 0.3s; flex-shrink: 0; }
-.faq-item.open .faq-arrow { transform: rotate(180deg); }
-.faq-answer { font-size: 14px; color: #667; line-height: 1.75; padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
-.faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.25rem; }
+  .type-dark .el-dot { background: rgba(89,87,97,0.3); }
+  .type-dark.selected { border-color: var(--dark); box-shadow: 0 0 14px rgba(89,87,97,0.5); }
+  .type-dark .el-check { background: var(--dark); border-color: var(--dark); }
 
-/* CONTATO */
-.contact-section { background: var(--navy); padding: 7rem 5vw; position: relative; overflow: hidden; }
-.contact-section::after {
-  content: 'JB'; position: absolute; right: 2vw; bottom: -3rem;
-  font-family: 'Bebas Neue', sans-serif; font-size: 300px;
-  color: rgba(255,255,255,0.015); line-height: 1; pointer-events: none; user-select: none;
-}
-.contact-section .section-title { color: white; }
-.contact-section .section-title span { color: var(--orange); }
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; position: relative; z-index: 1; }
-.contact-info-text { font-size: 15px; color: #6a80a0; line-height: 1.85; font-weight: 300; margin: 1rem 0 2rem; }
-.area-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
-.area-tag {
-  background: rgba(232,119,34,0.07); border: 1px solid rgba(232,119,34,0.18);
-  color: var(--orange); font-size: 12px; letter-spacing: 0.5px; padding: 5px 14px; border-radius: 30px; transition: background 0.2s;
-}
-.area-tag:hover { background: rgba(232,119,34,0.14); }
-.contact-card {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(232,119,34,0.12);
-  border-radius: 20px; padding: 2.25rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  display: flex; flex-direction: column; gap: 1.5rem;
-}
-.contact-person {
-  display: flex; align-items: center; gap: 1.1rem;
-  padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.contact-avatar {
-  width: 58px; height: 58px; background: var(--orange); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: white; flex-shrink: 0;
-  box-shadow: 0 0 24px rgba(232,119,34,0.35);
-}
-.contact-name { font-size: 19px; font-weight: 600; color: white; }
-.contact-role { font-size: 13px; color: #5a7090; }
-.contact-item { display: flex; align-items: center; gap: 14px; }
-.contact-item-icon { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.contact-item-label { font-size: 10px; color: #445; letter-spacing: 1.5px; text-transform: uppercase; }
-.contact-item-value { font-size: 15px; color: white; font-weight: 500; }
-.contact-item-value a { color: inherit; text-decoration: none; transition: color 0.2s; }
-.contact-item-value a:hover { color: var(--orange); }
-.wa-btn-full {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--wa); color: white; padding: 15px 22px;
-  border-radius: 12px; text-decoration: none; font-size: 15px; font-weight: 600;
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.2);
-}
-.wa-btn-full:hover { background: #1db954; transform: translateY(-3px); box-shadow: 0 8px 30px rgba(37,211,102,0.35); }
-.wa-btn-full svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
-.wa-btn-full span { flex: 1; }
-.wa-num { font-size: 13px; opacity: 0.75; font-weight: 400; }
+  .type-dragon .el-dot { background: rgba(12,105,200,0.2); }
+  .type-dragon.selected { border-color: var(--dragon); box-shadow: 0 0 14px rgba(12,105,200,0.4); }
+  .type-dragon .el-check { background: var(--dragon); border-color: var(--dragon); }
 
-/* BOTÃO FLUTUANTE WA */
-.wa-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; }
-.wa-float-tip {
-  background: var(--navy-mid); color: white; font-size: 12px; font-weight: 500;
-  padding: 6px 14px; border-radius: 30px; white-space: nowrap;
-  opacity: 0; transform: translateX(10px); transition: opacity 0.25s, transform 0.25s;
-  pointer-events: none; border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-.wa-float:hover .wa-float-tip { opacity: 1; transform: translateX(0); }
-.wa-float-btn {
-  width: 60px; height: 60px; border-radius: 50%; background: var(--wa);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 24px rgba(37,211,102,0.45);
-  transition: transform 0.25s, box-shadow 0.25s; text-decoration: none;
-  animation: waPulse 3s infinite;
-}
-.wa-float-btn:hover { transform: scale(1.12); box-shadow: 0 8px 36px rgba(37,211,102,0.6); }
-.wa-float-btn svg { width: 32px; height: 32px; fill: white; }
-@keyframes waPulse {
-  0%,100% { box-shadow: 0 4px 24px rgba(37,211,102,0.45); }
-  50% { box-shadow: 0 4px 36px rgba(37,211,102,0.7), 0 0 0 8px rgba(37,211,102,0.1); }
-}
+  .type-electric .el-dot { background: rgba(242,217,78,0.2); }
+  .type-electric.selected { border-color: var(--electric); box-shadow: 0 0 14px rgba(242,217,78,0.4); }
+  .type-electric .el-check { background: var(--electric); border-color: var(--electric); }
 
-/* SOCIAL */
-.social-links { display: flex; gap: 0.5rem; align-items: center; }
-.social-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border-radius: 8px;
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-  transition: background 0.2s, transform 0.15s; text-decoration: none;
-}
-.social-btn:hover { background: rgba(232,119,34,0.12); border-color: rgba(232,119,34,0.3); transform: translateY(-2px); }
-.social-btn svg { width: 16px; height: 16px; }
+  .type-fairy .el-dot { background: rgba(238,144,230,0.2); }
+  .type-fairy.selected { border-color: var(--fairy); box-shadow: 0 0 14px rgba(238,144,230,0.4); }
+  .type-fairy .el-check { background: var(--fairy); border-color: var(--fairy); }
 
-/* FOOTER */
-footer { background: #080f1e; padding: 2.5rem 5vw; }
-.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
-.footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--orange); letter-spacing: 1px; }
-.footer-sub { font-size: 11px; color: #283650; margin-top: 3px; letter-spacing: 0.5px; }
-.footer-copy { font-size: 11px; color: #1e2e48; letter-spacing: 0.5px; }
-.footer-social { display: flex; gap: 0.5rem; }
+  .type-fighting .el-dot { background: rgba(211,66,95,0.2); }
+  .type-fighting.selected { border-color: var(--fighting); box-shadow: 0 0 14px rgba(211,66,95,0.4); }
+  .type-fighting .el-check { background: var(--fighting); border-color: var(--fighting); }
 
-/* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.65s ease, transform 0.65s ease; }
-.reveal.visible { opacity: 1; transform: none; }
+  .type-fire .el-dot { background: rgba(251,165,76,0.2); }
+  .type-fire.selected { border-color: var(--fire); box-shadow: 0 0 14px rgba(251,165,76,0.4); }
+  .type-fire .el-check { background: var(--fire); border-color: var(--fire); }
 
-/* RESPONSIVE */
-@media (max-width: 960px) {
-  .hero-visual { display: none; }
-  .hero-stats { flex-wrap: wrap; }
-  .stat { min-width: 130px; }
-  .calc-wrapper { grid-template-columns: 1fr; gap: 3rem; }
-  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .nav-links { display: none; }
-  .nav-hamburger { display: flex; }
-  .faq-grid { grid-template-columns: 1fr; }
-  nav .social-links { display: none; }
-  .steps-grid::before { display: none; }
-  .cta-banner { flex-direction: column; text-align: center; }
-}
-@media (max-width: 600px) {
-  .hero-title { font-size: 62px; }
-  .stat { padding: 1rem; }
-  .stat-num { font-size: 28px; }
-  .testimonials-grid { grid-template-columns: 1fr; }
-  .steps-grid { gap: 2rem; }
-  .step { padding: 0; }
-}
+  .type-flying .el-dot { background: rgba(137,170,227,0.2); }
+  .type-flying.selected { border-color: var(--flying); box-shadow: 0 0 14px rgba(137,170,227,0.4); }
+  .type-flying .el-check { background: var(--flying); border-color: var(--flying); }
+
+  .type-ghost .el-dot { background: rgba(95,109,188,0.2); }
+  .type-ghost.selected { border-color: var(--ghost); box-shadow: 0 0 14px rgba(95,109,188,0.4); }
+  .type-ghost .el-check { background: var(--ghost); border-color: var(--ghost); }
+
+  .type-grass .el-dot { background: rgba(95,189,88,0.2); }
+  .type-grass.selected { border-color: var(--grass); box-shadow: 0 0 14px rgba(95,189,88,0.4); }
+  .type-grass .el-check { background: var(--grass); border-color: var(--grass); }
+
+  .type-ground .el-dot { background: rgba(218,124,77,0.2); }
+  .type-ground.selected { border-color: var(--ground); box-shadow: 0 0 14px rgba(218,124,77,0.4); }
+  .type-ground .el-check { background: var(--ground); border-color: var(--ground); }
+
+  .type-ice .el-dot { background: rgba(117,208,193,0.2); }
+  .type-ice.selected { border-color: var(--ice); box-shadow: 0 0 14px rgba(117,208,193,0.4); }
+  .type-ice .el-check { background: var(--ice); border-color: var(--ice); }
+
+  .type-normal .el-dot { background: rgba(160,162,159,0.2); }
+  .type-normal.selected { border-color: var(--normal); box-shadow: 0 0 14px rgba(160,162,159,0.4); }
+  .type-normal .el-check { background: var(--normal); border-color: var(--normal); }
+
+  .type-poison .el-dot { background: rgba(183,99,207,0.2); }
+  .type-poison.selected { border-color: var(--poison); box-shadow: 0 0 14px rgba(183,99,207,0.4); }
+  .type-poison .el-check { background: var(--poison); border-color: var(--poison); }
+
+  .type-psychic .el-dot { background: rgba(250,133,129,0.2); }
+  .type-psychic.selected { border-color: var(--psychic); box-shadow: 0 0 14px rgba(250,133,129,0.4); }
+  .type-psychic .el-check { background: var(--psychic); border-color: var(--psychic); }
+
+  .type-rock .el-dot { background: rgba(201,187,138,0.2); }
+  .type-rock.selected { border-color: var(--rock); box-shadow: 0 0 14px rgba(201,187,138,0.4); }
+  .type-rock .el-check { background: var(--rock); border-color: var(--rock); }
+
+  .type-steel .el-dot { background: rgba(86,149,163,0.2); }
+  .type-steel.selected { border-color: var(--steel); box-shadow: 0 0 14px rgba(86,149,163,0.4); }
+  .type-steel .el-check { background: var(--steel); border-color: var(--steel); }
+
+  .type-water .el-dot { background: rgba(83,157,223,0.2); }
+  .type-water.selected { border-color: var(--water); box-shadow: 0 0 14px rgba(83,157,223,0.4); }
+  .type-water .el-check { background: var(--water); border-color: var(--water); }
+
+  /* DISCOUNT BAR */
+  .discount-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 20px;
+  }
+  .discount-bar-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .discount-steps {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .discount-step {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 11px;
+    transition: all 0.3s;
+  }
+  .discount-step .ds-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 2px;
+    transition: color 0.3s;
+  }
+  .discount-step .ds-label { color: var(--muted); font-size: 10px; }
+  .discount-step.active { border-color: var(--gold); background: rgba(201,162,39,0.1); }
+  .discount-step.active .ds-val { color: var(--gold); }
+  .discount-step.active .ds-label { color: var(--gold2); }
+
+  /* TOTAL PANEL */
+  .total-panel {
+    background: linear-gradient(135deg, var(--card), rgba(10,25,55,0.8));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 24px;
+    margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .total-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--muted);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .total-row:last-of-type { border-bottom: none; }
+  .total-row .label { font-size: 14px; }
+  .total-row .value { font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--text); }
+  .total-row.discount .value { color: var(--green); }
+  .total-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .total-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .total-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    animation: pulse-gold 2s ease-in-out infinite;
+  }
+  @keyframes pulse-gold {
+    0%, 100% { text-shadow: 0 0 8px rgba(201,162,39,0.4); }
+    50% { text-shadow: 0 0 20px rgba(232,197,71,0.7); }
+  }
+
+  /* CLEAR BUTTON */
+  .clear-btn {
+    width: 100%;
+    background: transparent;
+    border: 1.5px solid rgba(224,53,53,0.4);
+    border-radius: 14px;
+    padding: 13px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .clear-btn:hover {
+    background: rgba(224,53,53,0.08);
+    border-color: var(--red);
+    transform: translateY(-1px);
+  }
+  .clear-btn:active { transform: scale(0.98); }
+
+  /* CONFIRM MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6,13,26,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    animation: modal-in 0.2s ease;
+  }
+  @keyframes modal-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .modal-icon { font-size: 36px; margin-bottom: 12px; }
+  .modal-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .modal-desc { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 10px; }
+  .modal-cancel {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .modal-cancel:hover { background: rgba(255,255,255,0.06); }
+  .modal-confirm {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--red);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .modal-confirm:hover { opacity: 0.88; }
+  .modal-confirm:active { transform: scale(0.97); }
+
+  /* CTA BUTTON */
+  .cta-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #128c7e, #25d366);
+    border: none;
+    border-radius: 14px;
+    padding: 18px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: white;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.25);
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+  }
+  .cta-btn:active { transform: scale(0.98); }
+  .cta-btn svg { width: 24px; height: 24px; fill: white; }
+
+  /* FEATURES */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 30px;
+  }
+  .feature {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .feature-icon { font-size: 22px; margin-bottom: 8px; }
+  .feature-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .feature-desc { font-size: 12px; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    font-family: 'Orbitron', sans-serif;
+  }
 </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
+<!-- STARS -->
+<div class="stars" id="stars"></div>
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-icon">
-      <svg viewBox="0 0 40 40"><path d="M20 4C13.4 4 8 9.4 8 16c0 9 12 20 12 20s12-11 12-20C32 9.4 26.6 4 20 4zm0 16a4 4 0 110-8 4 4 0 010 8z"/></svg>
-    </div>
-    <div>
-      <div class="nav-logo-text">JB Transportes</div>
-      <div class="nav-logo-sub">Encomendas & Serviços</div>
-    </div>
+<!-- FLOATING BUTTONS -->
+<div class="float-bar">
+  <a class="float-btn whats" href="https://wa.me/5565999911832" target="_blank" title="WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="tooltip">WhatsApp</span>
   </a>
-  <ul class="nav-links">
-    <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#calcular">Calcular Rota</a></li>
-    <li><a href="#como-funciona">Como Funciona</a></li>
-    <li><a href="#contato" class="nav-cta">Falar Agora</a></li>
-  </ul>
-  <div class="social-links">
-    <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn" title="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
-    </a>
-    <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp">
-      <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-  </div>
-  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
+  <button class="float-btn top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    ↑
+    <span class="tooltip">Voltar ao topo</span>
   </button>
-</nav>
-
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="#servicos" onclick="toggleMenu()">Serviços</a>
-  <a href="#calcular" onclick="toggleMenu()">Calcular Rota</a>
-  <a href="#como-funciona" onclick="toggleMenu()">Como Funciona</a>
-  <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" onclick="toggleMenu()">📸 Instagram</a>
-  <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" onclick="toggleMenu()">📢 Canal WhatsApp</a>
-  <a href="#contato" onclick="toggleMenu()">Falar Agora →</a>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      Atendimento em toda a região
-    </div>
-    <h1 class="hero-title">
-      <em>Levo</em>
-      você<br><span>onde precisa</span>
-    </h1>
-    <p class="hero-tagline">
-      <strong>Translado entre cidades, entregas e serviços.</strong><br>
-      Conforto, pontualidade e segurança onde você precisar.
-    </p>
-    <div class="hero-buttons">
-      <a href="#calcular" class="btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Calcular Rota
-      </a>
-      <a href="https://wa.me/5534991770228" target="_blank" class="btn-wa">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Chamar no WhatsApp
-      </a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">+5</div><div class="stat-label">Anos de experiência</div></div>
-      <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Atendimento</div></div>
-      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Comprometido</div></div>
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Rotas atendidas</div></div>
-    </div>
+<!-- HEADER -->
+<header>
+  <div class="logo-hex">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,5 93,27.5 93,72.5 50,95 7,72.5 7,27.5" fill="none" stroke="#c9a227" stroke-width="3"/>
+      <polygon points="50,14 85,32 85,68 50,86 15,68 15,32" fill="#0e1e35" stroke="#1a3155" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="16" fill="none" stroke="#c9a227" stroke-width="2"/>
+      <circle cx="50" cy="50" r="6" fill="#c9a227"/>
+      <line x1="32" y1="50" x2="26" y2="50" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <line x1="68" y1="50" x2="74" y2="50" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <line x1="50" y1="32" x2="50" y2="26" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <line x1="50" y1="68" x2="50" y2="74" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="50,20 53,29 62,29 55,34 58,43 50,38 42,43 45,34 38,29 47,29" fill="#c9a227" opacity="0.8"/>
+    </svg>
   </div>
-  <div class="hero-visual">
-    <div class="orb-wrap">
-      <div class="orb-ring"><div class="orb-dot"></div></div>
-      <div class="orb-ring"></div>
-      <div class="orb-ring"></div>
-      <div class="orb-core">
-        <svg viewBox="0 0 80 80"><path d="M40 8C26.7 8 16 18.7 16 32c0 18 24 40 24 40s24-22 24-40C64 18.7 53.3 8 40 8zm0 32a8 8 0 110-16 8 8 0 010 16z"/></svg>
+  <div class="brand-title">POKÉ ALLIANCE</div>
+  <div class="brand-sub">SERVICO DE TALENTOS</div>
+  <div class="header-divider"></div>
+  <div class="filipi-tag">F I L I P I</div><br>
+  <div class="server-tag">servidor MOON</div>
+</header>
+
+<main>
+
+  <!-- HP & SPEED -->
+  <div class="section-title">SERVIÇOS DE STATUS</div>
+
+  <div class="hpspeed-grid">
+    <div class="service-card hp" id="card-hp">
+      <div class="card-check" id="check-hp"></div>
+      <div class="card-icon">❤️</div>
+      <div class="card-name">HP</div>
+      <div class="card-desc">Serviço de itens<br>de pontos de vida</div>
+      <div class="card-price" id="price-hp">R$ 25,00</div>
+      <div class="counter-wrap">
+        <button class="counter-btn" id="btn-hp-minus">−</button>
+        <span class="counter-val" id="count-hp">0</span>
+        <button class="counter-btn" id="btn-hp-plus">+</button>
       </div>
-      <div class="orb-label">JB TRANSPORTES</div>
+    </div>
+    <div class="service-card speed" id="card-speed">
+      <div class="card-check" id="check-speed"></div>
+      <div class="card-icon">⚡</div>
+      <div class="card-name">SPEED</div>
+      <div class="card-desc">Serviço de itens<br>de velocidade</div>
+      <div class="card-price" id="price-speed">R$ 25,00</div>
+      <div class="counter-wrap">
+        <button class="counter-btn" id="btn-speed-minus">−</button>
+        <span class="counter-val" id="count-speed">0</span>
+        <button class="counter-btn" id="btn-speed-plus">+</button>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- SERVIÇOS -->
-<section class="services-section" id="servicos">
-  <div class="reveal" style="text-align:center; max-width:560px; margin:0 auto;">
-    <div class="section-label" style="justify-content:center;">O que fazemos</div>
-    <h2 class="section-title">Nossos Serviços</h2>
-    <p class="section-subtitle" style="color:#6a80a0; margin:0 auto;">Soluções completas de transporte para você e sua empresa, com conforto e pontualidade.</p>
+  <div class="combo-banner">
+    COMBO ESPECIAL &nbsp;•&nbsp;
+    <strong>HP + SPEED = R$ 45,00</strong>
+    &nbsp;|&nbsp; TALENTO COMPLETO = R$ 60,00
   </div>
-  <div class="services-grid reveal">
-    <div class="service-card">
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M21 8l-2-4H5L3 8H1v2h1l1 10h18l1-10h1V8h-2zm-8 9h-2v-5h2v5zm4 0h-2v-5h2v5zm-8 0H7v-5h2v5z"/></svg></div>
-      <div class="service-title">Translado entre cidades</div>
-      <div class="service-desc">Viagens particulares de uma cidade a outra com conforto e segurança. Ideal para consultas médicas, compromissos de negócios e viagens pessoais.</div>
-      <span class="service-tag">Transporte / Babacar</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
-      <div class="service-title">Entrega de Encomendas</div>
-      <div class="service-desc">Busca e entrega de encomendas com agilidade. Documentos, mercadorias e volumes com cuidado do início ao fim.</div>
-      <span class="service-tag">Porta a porta</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
-      <div class="service-title">Serviços Especiais</div>
-      <div class="service-desc">Traslado para aeroportos, terminais e estações. Atendimento a empresas com tarifa diferenciada e serviço recorrente.</div>
-      <span class="service-tag">Empresas & pessoal</span>
-    </div>
-  </div>
-</section>
 
-<!-- BANNER CTA -->
-<div class="cta-banner reveal">
-  <div class="cta-banner-text">
-    <span>Precisa de transporte agora?</span>
-    Fale direto com o Jander
+  <!-- ELEMENTAIS -->
+  <div class="section-title">TALENTOS ELEMENTAIS</div>
+
+  <div class="elementals-grid" id="elementals-grid"></div>
+
+  <!-- DISCOUNT BAR -->
+  <div class="discount-bar">
+    <div class="discount-bar-title">ESCALA DE DESCONTO — TALENTOS</div>
+    <div class="discount-steps">
+      <div class="discount-step" id="ds-2">
+        <div class="ds-val">5%</div>
+        <div class="ds-label">2 tipos</div>
+      </div>
+      <div class="discount-step" id="ds-4">
+        <div class="ds-val">10%</div>
+        <div class="ds-label">4 tipos</div>
+      </div>
+      <div class="discount-step" id="ds-6">
+        <div class="ds-val">15%</div>
+        <div class="ds-label">6 tipos</div>
+      </div>
+      <div class="discount-step" id="ds-8">
+        <div class="ds-val">20%</div>
+        <div class="ds-label">8 tipos</div>
+      </div>
+    </div>
   </div>
-  <a class="btn-banner" href="https://wa.me/5534991770228" target="_blank">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="#c96210"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    Enviar mensagem agora →
-  </a>
+
+  <!-- TOTAL -->
+  <div class="total-panel">
+    <div class="total-row" id="row-hp" style="display:none">
+      <span class="label">❤️ HP</span>
+      <span class="value" id="val-hp">R$ 25,00</span>
+    </div>
+    <div class="total-row" id="row-speed" style="display:none">
+      <span class="label">⚡ Speed</span>
+      <span class="value" id="val-speed">R$ 25,00</span>
+    </div>
+    <div class="total-row" id="row-talentos" style="display:none">
+      <span class="label" id="lbl-talentos">Talentos (0×)</span>
+      <span class="value" id="val-talentos">R$ 0,00</span>
+    </div>
+    <div class="total-row discount" id="row-desconto" style="display:none">
+      <span class="label" id="lbl-desconto">Desconto (0%)</span>
+      <span class="value" id="val-desconto">-R$ 0,00</span>
+    </div>
+    <div class="total-main">
+      <span class="total-label">TOTAL</span>
+      <span class="total-value">R$ <span id="total">0,00</span></span>
+    </div>
+  </div>
+
+  <button class="clear-btn" onclick="abrirModalLimpar()">
+    🗑️ LIMPAR TODAS AS SELEÇÕES
+  </button>
+
+  <button class="cta-btn" onclick="enviarWhats()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    FINALIZAR NO WHATSAPP
+  </button>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🚀</div>
+      <div class="feature-name">ENTREGA RÁPIDA</div>
+      <div class="feature-desc">Serviço garantido</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌙</div>
+      <div class="feature-name">SERVER MOON</div>
+      <div class="feature-desc">Jogador experiente</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔮</div>
+      <div class="feature-name">ORBS INCLUSAS</div>
+      <div class="feature-desc">Simple • Arcane • Mythic</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>POKÉ ALLIANCE • F I L I P I • SERVER MOON</footer>
+
+<!-- MODAL LIMPAR -->
+<div class="modal-overlay" id="modal-limpar">
+  <div class="modal-box">
+    <div class="modal-icon">🗑️</div>
+    <div class="modal-title">LIMPAR SELEÇÕES</div>
+    <div class="modal-desc">Deseja limpar todas as marcações?<br>Essa ação não pode ser desfeita.</div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="fecharModalLimpar()">Cancelar</button>
+      <button class="modal-confirm" onclick="confirmarLimpar()">Confirmar</button>
+    </div>
+  </div>
 </div>
-
-<!-- CALCULADORA -->
-<section class="calc-section" id="calcular">
-  <div class="calc-wrapper">
-    <div class="calc-info reveal">
-      <div class="section-label">Rápido e direto</div>
-      <h2 class="section-title">Informe a rota<br><span>e fale com o Jander</span></h2>
-      <p class="calc-info-text">Digite o endereço de partida e o destino. Clique no botão e a mensagem já vai formatada pro WhatsApp do Jander.</p>
-      <div class="info-items">
-        <div class="info-item"><div class="info-item-icon">📍</div><div><div class="info-item-title">Endereço completo</div><div class="info-item-desc">Informe a rua de partida e de destino para facilitar o orçamento.</div></div></div>
-        <div class="info-item"><div class="info-item-icon">💬</div><div><div class="info-item-title">Mensagem automática</div><div class="info-item-desc">A rota vai direto pro WhatsApp do Jander, formatada e pronta.</div></div></div>
-        <div class="info-item"><div class="info-item-icon">✅</div><div><div class="info-item-title">Combine o valor</div><div class="info-item-desc">O Jander responde com o preço e a disponibilidade para a sua rota.</div></div></div>
-      </div>
-    </div>
-    <div class="reveal">
-      <div class="calc-form">
-        <div class="calc-field">
-          <label>Local de Partida <span style="color:var(--orange)">*</span></label>
-          <input type="text" id="origin" placeholder="Ex: Rua das Flores 123, Uberlândia, MG">
-        </div>
-        <div class="calc-divider">↓</div>
-        <div class="calc-field">
-          <label>Destino <span style="color:var(--orange)">*</span></label>
-          <input type="text" id="dest" placeholder="Ex: Av. Paulista 1000, São Paulo, SP">
-        </div>
-        <button class="btn-calc" onclick="calcular()">Enviar rota no WhatsApp</button>
-        <div class="err-msg" id="errMsg"></div>
-        <div class="calc-result" id="resultBox">
-          <div class="result-route">📍 <strong id="routeLabel">—</strong></div>
-          <a class="result-cta" id="waLink" href="https://wa.me/5534991770228" target="_blank">
-            <div><div class="result-cta-label">Enviar rota e iniciar negociação</div><div class="result-cta-action">Chamar no WhatsApp →</div></div>
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COMO FUNCIONA -->
-<section class="steps-section" id="como-funciona">
-  <div class="reveal" style="text-align:center; max-width:520px; margin:0 auto;">
-    <div class="section-label" style="justify-content:center;">Simples assim</div>
-    <h2 class="section-title">Como funciona</h2>
-    <p class="section-subtitle" style="margin:0 auto; color:#778;">Da sua solicitação até o destino, em 4 passos fáceis.</p>
-  </div>
-  <div class="steps-grid reveal">
-    <div class="step">
-      <div class="step-num-wrap"><div class="step-num">01</div></div>
-      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
-      <div class="step-title">Entre em contato</div>
-      <div class="step-desc">Mande mensagem no WhatsApp ou calcule a rota aqui no site.</div>
-    </div>
-    <div class="step">
-      <div class="step-num-wrap"><div class="step-num">02</div></div>
-      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
-      <div class="step-title">Agende a viagem</div>
-      <div class="step-desc">Combine horário e local de embarque diretamente pelo WhatsApp.</div>
-    </div>
-    <div class="step">
-      <div class="step-num-wrap"><div class="step-num">03</div></div>
-      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
-      <div class="step-title">Embarque tranquilo</div>
-      <div class="step-desc">O Jander busca você no endereço combinado, com pontualidade.</div>
-    </div>
-    <div class="step">
-      <div class="step-num-wrap"><div class="step-num">04</div></div>
-      <div class="step-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
-      <div class="step-title">Chegue no destino</div>
-      <div class="step-desc">Viagem confortável e segura. Pague o valor combinado na chegada.</div>
-    </div>
-  </div>
-</section>
-
-<!-- DEPOIMENTOS -->
-<section class="testimonials-section" id="depoimentos">
-  <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
-    <div class="section-label" style="justify-content:center;">Quem já viajou</div>
-    <h2 class="section-title">O que dizem<br><span>os clientes</span></h2>
-  </div>
-  <div class="testimonials-grid reveal">
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"Precisei ir a uma consulta em Uberaba e o Jander foi super pontual. Confortável, seguro e sem estresse. Recomendo muito!"</p>
-      <div class="testimonial-author"><div class="testimonial-avatar">MA</div><div><div class="testimonial-name">Maria Aparecida</div><div class="testimonial-city">Uberlândia, MG</div></div></div>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"Uso o serviço pra enviar encomendas para São Paulo toda semana. Sempre chega no prazo e o Jander avisa quando entregou. Confiança total."</p>
-      <div class="testimonial-author"><div class="testimonial-avatar">RS</div><div><div class="testimonial-name">Roberto Silva</div><div class="testimonial-city">Uberaba, MG</div></div></div>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"Fui de Uberlândia até Brasília e a viagem foi ótima. Carro limpo, ar-condicionado gelado e paradas quando precisei. Melhor que pegar ônibus!"</p>
-      <div class="testimonial-author"><div class="testimonial-avatar">CF</div><div><div class="testimonial-name">Carla Ferreira</div><div class="testimonial-city">Uberlândia, MG</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-section" id="faq">
-  <div class="reveal" style="text-align:center; max-width:500px; margin:0 auto;">
-    <div class="section-label" style="justify-content:center;">Tire suas dúvidas</div>
-    <h2 class="section-title">Perguntas<br><span style="color:var(--orange)">frequentes</span></h2>
-  </div>
-  <div class="faq-grid reveal">
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Como funciona o pagamento? <span class="faq-arrow">▾</span></button><div class="faq-answer">O pagamento é combinado diretamente com o Jander pelo WhatsApp antes da viagem. Aceitamos dinheiro e Pix.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Atende em quais horários? <span class="faq-arrow">▾</span></button><div class="faq-answer">O atendimento é feito 24 horas por dia, 7 dias por semana. Entre em contato pelo WhatsApp para verificar disponibilidade.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Posso enviar encomendas sem viajar junto? <span class="faq-arrow">▾</span></button><div class="faq-answer">Sim! O serviço de entrega de encomendas é feito de forma independente. Você entrega o item e o Jander leva até o destinatário.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Qual o prazo para agendar? <span class="faq-arrow">▾</span></button><div class="faq-answer">Para garantir o horário desejado, o ideal é agendar com pelo menos algumas horas de antecedência. Urgências são avaliadas conforme disponibilidade.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">O serviço atende fora do Triângulo Mineiro? <span class="faq-arrow">▾</span></button><div class="faq-answer">Sim! Atendemos rotas para São Paulo, Brasília, Goiânia e outras cidades. Consulte pelo WhatsApp para destinos específicos.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Quantas pessoas cabem no veículo? <span class="faq-arrow">▾</span></button><div class="faq-answer">O veículo comporta até 4 passageiros confortavelmente, além de bagagem. Para grupos maiores, consulte disponibilidade.</div></div>
-  </div>
-</section>
-
-<!-- CONTATO -->
-<section class="contact-section" id="contato">
-  <div class="contact-grid">
-    <div class="reveal">
-      <div class="section-label">Fale com a gente</div>
-      <h2 class="section-title">Pronto pra<br><span>embarcar?</span></h2>
-      <p class="contact-info-text">Entre em contato com o Jander Borges diretamente pelo WhatsApp. Atendimento rápido, sem enrolação.</p>
-      <div>
-        <div class="section-label" style="margin-bottom:0.75rem;">Regiões atendidas</div>
-        <div class="area-tags">
-          <span class="area-tag">Uberlândia</span><span class="area-tag">Uberaba</span>
-          <span class="area-tag">Triângulo Mineiro</span><span class="area-tag">São Paulo</span>
-          <span class="area-tag">Brasília</span><span class="area-tag">Goiânia</span>
-          <span class="area-tag">E mais...</span>
-        </div>
-      </div>
-    </div>
-    <div class="reveal">
-      <div class="contact-card">
-        <div class="contact-person">
-          <div class="contact-avatar">JB</div>
-          <div><div class="contact-name">Jander Borges</div><div class="contact-role">Motorista & Responsável</div></div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:rgba(232,119,34,0.12);">
-            <svg viewBox="0 0 24 24" fill="#e87722" width="18" height="18"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </div>
-          <div><div class="contact-item-label">E-mail</div><div class="contact-item-value"><a href="mailto:jbtransportesencomendas@gmail.com">jbtransportesencomendas@gmail.com</a></div></div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:rgba(225,48,108,0.12);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
-          </div>
-          <div><div class="contact-item-label">Instagram</div><div class="contact-item-value"><a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank">@jbtransporteseencomendas</a></div></div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:rgba(37,211,102,0.12);">
-            <svg viewBox="0 0 24 24" fill="#25d366" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </div>
-          <div><div class="contact-item-label">Canal WhatsApp</div><div class="contact-item-value"><a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank">Entrar no canal →</a></div></div>
-        </div>
-        <a class="wa-btn-full" href="https://wa.me/5534991770228" target="_blank">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          <span>WhatsApp</span>
-          <span class="wa-num">(34) 99177-0228</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FLOATING WA -->
-<div class="wa-float">
-  <div class="wa-float-tip">Fale com o Jander agora</div>
-  <a class="wa-float-btn" href="https://wa.me/5534991770228" target="_blank" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </a>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">JB Transportes</div>
-      <div class="footer-sub">Encomendas & Serviços · Jander Borges</div>
-    </div>
-    <div class="footer-social">
-      <a href="https://www.instagram.com/jbtransporteseencomendas?utm_source=qr&igsh=MWlhczZweXdndTZ5dA==" target="_blank" class="social-btn" title="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#e1306c" stroke="none"/></svg>
-      </a>
-      <a href="https://whatsapp.com/channel/0029VbBP5eCA89Mr1r9N553b" target="_blank" class="social-btn" title="Canal WhatsApp">
-        <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      </a>
-      <a href="https://wa.me/5534991770228" target="_blank" class="social-btn" title="WhatsApp">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      </a>
-    </div>
-    <div class="footer-copy">© 2025 JB Transportes. Todos os direitos reservados.</div>
-  </div>
-</footer>
 
 <script>
-/* BARRA DE PROGRESSO */
-window.addEventListener('scroll', function() {
-  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  document.getElementById('progress-bar').style.width = (scrollTop / scrollHeight * 100) + '%';
-  document.getElementById('navbar').classList.toggle('scrolled', scrollTop > 30);
+// ---- STARS ----
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    --d:${(Math.random()*4+2).toFixed(1)}s;
+    --o:${(Math.random()*0.5+0.2).toFixed(2)};
+    animation-delay:${(Math.random()*6).toFixed(1)}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// ---- ELEMENTALS ----
+const tipos = [
+  { name:'Bug',      icon:'<img src=https://i.imgur.com/I3TEtIE.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-bug' },
+  { name:'Dark',     icon:'<img src=https://i.imgur.com/Ea75cVf.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-dark' },
+  { name:'Dragon',   icon:'<img src=https://i.imgur.com/NaEUJov.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-dragon' },
+  { name:'Electric', icon:'<img src=https://i.imgur.com/9gYIDvI.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-electric' },
+  { name:'Fairy',    icon:'<img src=https://i.imgur.com/cPVKird.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-fairy' },
+  { name:'Fighting', icon:'<img src=https://i.imgur.com/WvAqULu.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-fighting' },
+  { name:'Fire',     icon:'<img src=https://i.imgur.com/LUSja0u.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-fire' },
+  { name:'Flying',   icon:'<img src=https://i.imgur.com/ZsmO7z7.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-flying' },
+  { name:'Ghost',    icon:'<img src=https://i.imgur.com/xxpTBDI.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-ghost' },
+  { name:'Grass',    icon:'<img src=https://i.imgur.com/kmtM2s2.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-grass' },
+  { name:'Ground',   icon:'<img src=https://i.imgur.com/BMwn78D.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-ground' },
+  { name:'Ice',      icon:'<img src=https://i.imgur.com/8yVeZEU.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-ice' },
+  { name:'Normal',   icon:'<img src=https://i.imgur.com/y8UcqNW.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-normal' },
+  { name:'Poison',   icon:'<img src=https://i.imgur.com/blOp418.png style="width:22px;height:22px;object-fit:contain;display:block">️', cls:'type-poison' },
+  { name:'Psychic',  icon:'<img src=https://i.imgur.com/aOgZCsq.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-psychic' },
+  { name:'Rock',     icon:'<img src=https://i.imgur.com/GRxYHJv.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-rock' },
+  { name:'Steel',    icon:'<img src=https://i.imgur.com/CBGW1PZ.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-steel' },
+  { name:'Water',    icon:'<img src=https://i.imgur.com/Lf2dISW.png style="width:22px;height:22px;object-fit:contain;display:block">', cls:'type-water' },
+];
+
+const grid = document.getElementById('elementals-grid');
+tipos.forEach(t => {
+  const d = document.createElement('div');
+  d.className = `elemental-card ${t.cls}`;
+  d.dataset.name = t.name;
+  d.dataset.count = '0';
+  d.innerHTML = `
+    <div class="el-check"></div>
+    <div class="el-dot">${t.icon}</div>
+    <div class="el-name">${t.name}</div>
+    <div class="el-price">R$ 60</div>
+    <div class="el-counter">
+      <button class="el-counter-btn" data-delta="-1" data-type="${t.name}">−</button>
+      <span class="el-counter-val">0</span>
+      <button class="el-counter-btn" data-delta="1" data-type="${t.name}">+</button>
+    </div>
+  `;
+  // Buttons handle delta; clicking card body also adds 1
+  d.querySelectorAll('.el-counter-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const delta = parseInt(btn.dataset.delta);
+      changeElementalCount(d, delta);
+    });
+  });
+  d.addEventListener('click', () => changeElementalCount(d, 1));
+  grid.appendChild(d);
 });
 
-/* FAQ */
-function toggleFaq(btn) {
-  var item = btn.closest('.faq-item');
-  var isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
-  if (!isOpen) item.classList.add('open');
+// ---- STATE ----
+let hpCount = 0, speedCount = 0;
+const PRECO_HP = 25, PRECO_SPEED = 25, PRECO_COMBO = 45;
+const PRECO_TALENTO = 60;
+
+// Botões HP e Speed via addEventListener (sem onclick inline)
+document.getElementById('btn-hp-minus').addEventListener('click', () => changeCount('hp', -1));
+document.getElementById('btn-hp-plus').addEventListener('click',  () => changeCount('hp',  1));
+document.getElementById('btn-speed-minus').addEventListener('click', () => changeCount('speed', -1));
+document.getElementById('btn-speed-plus').addEventListener('click',  () => changeCount('speed',  1));
+
+function changeCount(type, delta) {
+  if (type === 'hp') {
+    hpCount = Math.max(0, hpCount + delta);
+    document.getElementById('count-hp').textContent = hpCount;
+    document.getElementById('card-hp').classList.toggle('selected', hpCount > 0);
+  } else {
+    speedCount = Math.max(0, speedCount + delta);
+    document.getElementById('count-speed').textContent = speedCount;
+    document.getElementById('card-speed').classList.toggle('selected', speedCount > 0);
+  }
+  atualizar();
 }
 
-/* MENU MOBILE */
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
+function changeElementalCount(el, delta) {
+  let count = parseInt(el.dataset.count) || 0;
+  count = Math.max(0, count + delta);
+  el.dataset.count = count;
+  el.querySelector('.el-counter-val').textContent = count;
+  el.classList.toggle('selected', count > 0);
+  if (count > 0) el.querySelector('.el-check').style.cssText = 'color:white';
+  atualizar();
 }
 
-/* CALCULADORA */
-function calcular() {
-  var origin = document.getElementById('origin').value.trim();
-  var dest   = document.getElementById('dest').value.trim();
-  var err    = document.getElementById('errMsg');
-  var result = document.getElementById('resultBox');
-  var oInput = document.getElementById('origin');
-  var dInput = document.getElementById('dest');
+function atualizar() {
+  let total = 0;
 
-  err.style.display = 'none';
-  result.classList.remove('show');
-  oInput.classList.remove('invalid');
-  dInput.classList.remove('invalid');
+  // HP + Speed with combo logic per "pair"
+  // If both selected, pairs get combo price, leftover gets individual price
+  const pairs = Math.min(hpCount, speedCount);
+  const hpExtra = hpCount - pairs;
+  const speedExtra = speedCount - pairs;
+  const hpSpeedTotal = pairs * PRECO_COMBO + hpExtra * PRECO_HP + speedExtra * PRECO_SPEED;
+  total += hpSpeedTotal;
 
-  if (!origin || !dest) {
-    err.textContent = 'Por favor, preencha o local de partida e o destino.';
-    err.style.display = 'block';
-    if (!origin) oInput.classList.add('invalid');
-    if (!dest)   dInput.classList.add('invalid');
+  // Elementals
+  let totalEls = 0, uniqueTypes = 0;
+  document.querySelectorAll('.elemental-card').forEach(el => {
+    const cnt = parseInt(el.dataset.count) || 0;
+    if (cnt > 0) { totalEls += cnt; uniqueTypes++; }
+  });
+  const sub = totalEls * PRECO_TALENTO;
+
+  // Bônus baseado na quantidade total de serviços (HP + Speed + Elementais)
+  const totalServicos = hpCount + speedCount + totalEls;
+  let pct = 0;
+  if (totalServicos >= 8) pct = 0.20;
+  else if (totalServicos >= 6) pct = 0.15;
+  else if (totalServicos >= 4) pct = 0.10;
+  else if (totalServicos >= 2) pct = 0.05;
+
+  const desc = sub * pct;
+  const talentoFinal = sub - desc;
+  total += talentoFinal;
+
+  // Update discount steps (based on total services quantity)
+  ['ds-2','ds-4','ds-6','ds-8'].forEach((id, i) => {
+    const thresholds = [2, 4, 6, 8];
+    document.getElementById(id).classList.toggle('active', totalServicos >= thresholds[i]);
+  });
+
+  // Update discount bar labels to show "serviços"
+  document.querySelector('#ds-2 .ds-label').textContent = '2 serv.';
+  document.querySelector('#ds-4 .ds-label').textContent = '4 serv.';
+  document.querySelector('#ds-6 .ds-label').textContent = '6 serv.';
+  document.querySelector('#ds-8 .ds-label').textContent = '8 serv.';
+
+  // Update rows
+  const show = (id, v) => document.getElementById(id).style.display = v ? '' : 'none';
+  show('row-hp', hpCount > 0);
+  show('row-speed', speedCount > 0);
+  show('row-talentos', totalEls > 0);
+  show('row-desconto', desc > 0);
+
+  // HP value label — show combo savings hint
+  const hpLabel = hpCount > 0 ? `❤️ HP ×${hpCount}${pairs>0?' (combo)':''}` : '❤️ HP';
+  const speedLabel = speedCount > 0 ? `⚡ Speed ×${speedCount}${pairs>0?' (combo)':''}` : '⚡ Speed';
+  document.querySelector('#row-hp .label').textContent = hpLabel;
+  document.querySelector('#row-speed .label').textContent = speedLabel;
+
+  // Compute individual display values
+  const hpDisplay = pairs * (PRECO_COMBO / 2) + hpExtra * PRECO_HP;
+  const speedDisplay = pairs * (PRECO_COMBO / 2) + speedExtra * PRECO_SPEED;
+  document.getElementById('val-hp').textContent = `R$ ${hpDisplay.toFixed(2).replace('.',',')}`;
+  document.getElementById('val-speed').textContent = `R$ ${speedDisplay.toFixed(2).replace('.',',')}`;
+
+  document.getElementById('lbl-talentos').textContent = `Talentos (${totalEls}×)`;
+  document.getElementById('val-talentos').textContent = `R$ ${sub.toFixed(2).replace('.',',')}`;
+  document.getElementById('lbl-desconto').textContent = `Desconto (${pct*100}%)`;
+  document.getElementById('val-desconto').textContent = `-R$ ${desc.toFixed(2).replace('.',',')}`;
+
+  document.getElementById('total').textContent = total.toFixed(2).replace('.',',');
+}
+
+function abrirModalLimpar() {
+  document.getElementById('modal-limpar').classList.add('open');
+}
+
+function fecharModalLimpar() {
+  document.getElementById('modal-limpar').classList.remove('open');
+}
+
+function confirmarLimpar() {
+  // Resetar HP e Speed
+  hpCount = 0;
+  speedCount = 0;
+  document.getElementById('count-hp').textContent = '0';
+  document.getElementById('count-speed').textContent = '0';
+  document.getElementById('card-hp').classList.remove('selected');
+  document.getElementById('card-speed').classList.remove('selected');
+
+  // Resetar todos os elementais
+  document.querySelectorAll('.elemental-card').forEach(el => {
+    el.dataset.count = '0';
+    el.querySelector('.el-counter-val').textContent = '0';
+    el.classList.remove('selected');
+    el.querySelector('.el-check').style.cssText = '';
+  });
+
+  fecharModalLimpar();
+  atualizar();
+}
+
+// Fechar modal ao clicar fora
+document.getElementById('modal-limpar').addEventListener('click', function(e) {
+  if (e.target === this) fecharModalLimpar();
+});
+
+function enviarWhats() {
+  const items = [];
+  if (hpCount > 0) items.push(`❤️ HP ×${hpCount}`);
+  if (speedCount > 0) items.push(`⚡ Speed ×${speedCount}`);
+  document.querySelectorAll('.elemental-card').forEach(el => {
+    const cnt = parseInt(el.dataset.count) || 0;
+    if (cnt > 0) items.push(`${el.dataset.name} ×${cnt}`);
+  });
+
+  if (items.length === 0) {
+    alert('Selecione ao menos um serviço!');
     return;
   }
 
-  document.getElementById('routeLabel').textContent = origin + ' → ' + dest;
-  var msg = 'Olá Jander! Gostaria de solicitar um serviço:\n\n'
-          + '📍 *Partida:* ' + origin + '\n'
-          + '🏁 *Destino:* ' + dest + '\n\n'
-          + 'Poderia me passar o valor e a disponibilidade?';
-  document.getElementById('waLink').href = 'https://wa.me/5534991770228?text=' + encodeURIComponent(msg);
-  result.classList.add('show');
-}
-
-/* SCROLL REVEAL */
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
+  const total = document.getElementById('total').textContent;
+  let totalServicos = 0;
+  document.querySelectorAll('.elemental-card').forEach(el => {
+    totalServicos += (parseInt(el.dataset.count)||0);
   });
-}, { threshold: 0.1 });
+  totalServicos += hpCount + speedCount;
+  let pct = 0;
+  if (totalServicos >= 8) pct = 20;
+  else if (totalServicos >= 6) pct = 15;
+  else if (totalServicos >= 4) pct = 10;
+  else if (totalServicos >= 2) pct = 5;
 
-document.querySelectorAll('.reveal').forEach(function(el) {
-  observer.observe(el);
-});
+  let msg = `Olá Filipi! Quero contratar os seguintes serviços:%0A%0A`;
+  msg += items.map(i => `• ${i}`).join('%0A');
+  if (pct > 0) msg += `%0A%0A🎉 Desconto aplicado: ${pct}%`;
+  msg += `%0A%0A💰 Total: R$ ${total}`;
+
+  window.open(`https://wa.me/5565999911832?text=${msg}`, '_blank');
+}
 </script>
 </body>
 </html>
